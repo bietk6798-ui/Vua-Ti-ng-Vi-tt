@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vua Tiếng Việt - Phiên Bản 10 Giây</title>
+<title>Vua Tiếng Việt - Sửa Lỗi Hết Giờ</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:system-ui,-apple-system,sans-serif;background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#fff;min-height:100vh;display:flex;justify-content:center;align-items:center;padding:16px}
@@ -21,7 +21,7 @@ h1{text-align:center;font-size:1.9rem;margin-bottom:6px;color:#fbbf24}
 .question{font-size:1.35rem;font-weight:700;margin-bottom:10px;text-align:center;line-height:1.4;min-height:60px;display:flex;align-items:center;justify-content:center}
 .hint{text-align:center;color:#94a3b8;margin-bottom:18px;font-size:.9rem}
 .choices{display:grid;gap:10px}
-.choice{background:#1e293b;border:2px solid #334155;color:#fff;padding:13px;border-radius:12px;font-size:1rem;text-align:left;cursor:pointer}
+.choice{background:#1e293b;border:2px solid #334155;color:#fff;padding:13px;border-radius:12px;font-size:1rem;text-align:left;cursor:pointer;width:100%}
 .choice.correct{background:#065f46;border-color:#10b981}
 .choice.wrong{background:#7f1d1d;border-color:#ef4444}
 .score{text-align:center;margin:16px 0;font-size:1.05rem}
@@ -101,7 +101,8 @@ const questions = {
 let currentQuestions = [], currentIndex = 0, score = 0;
 let musicPlaying = false;
 let timerInterval = null;
-let timeLeft = 100; // Phần trăm thời gian còn lại
+let timeLeft = 100;
+let isAnswered = false; // Biến khóa trạng thái tránh đơ game
 
 const bgMusic = new Audio('https://soundhelix.com');
 bgMusic.loop = true;
@@ -144,8 +145,11 @@ function startTimer() {
   const bar = document.getElementById('timerBar');
   bar.style.width = '100%';
   
-  // 100 mili-giây chạy 1 lần -> 10 giây = 100 lần chạy
   timerInterval = setInterval(() => {
+    if (isAnswered) {
+      clearInterval(timerInterval);
+      return;
+    }
     timeLeft -= 1;
     bar.style.width = timeLeft + '%';
     
@@ -153,10 +157,11 @@ function startTimer() {
       clearInterval(timerInterval);
       handleTimeout();
     }
-  }, 100);
+  }, 100); // 100ms * 100 lần giảm = 10 giây
 }
 
 function loadQuestion() {
+  isAnswered = false;
   const q = currentQuestions[currentIndex];
   document.getElementById('question').textContent = q.q;
   document.getElementById('hint').textContent = q.hint ? '💡 Gợi ý: ' + q.hint : '';
@@ -177,26 +182,24 @@ function loadQuestion() {
 }
 
 function selectChoice(btn, selected, answer) {
+  if (isAnswered) return;
+  isAnswered = true;
   clearInterval(timerInterval);
+  
+  // Khóa tất cả các nút bấm
   document.querySelectorAll('.choice').forEach(b => b.onclick = null);
   
   if (selected === answer) {
-    btn.classList.add('correct');
+    if (btn) btn.classList.add('correct');
     score++;
     correctSound.currentTime = 0;
     correctSound.play().catch(()=>{});
     showToast();
   } else {
-    if(btn) btn.classList.add('wrong');
+    if (btn) btn.classList.add('wrong');
+    // Hiển thị nút có đáp án chính xác
     document.querySelectorAll('.choice').forEach(b => {
       if (b.textContent === answer) b.classList.add('correct');
     });
   }
-  document.getElementById('score').textContent = score;
-  document.getElementById('nextBtn').style.display = 'block';
-}
-
-function handleTimeout() {
-  // Khi hết giờ, tự động show đáp án đúng giống như trả lời sai
-  const q = currentQuestions[currentIndex];
   
