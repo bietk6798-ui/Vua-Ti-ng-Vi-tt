@@ -1,42 +1,172 @@
 <!doctype html>
 <html lang="vi">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#10152e"><title>Vua Tiếng Việt — Thử thách</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#10152e">
+<title>Vua Tiếng Việt — Thử thách</title>
 <style>
-:root{--bg:#10152e;--panel:#1b2345;--panel2:#252f5c;--ink:#f7f8ff;--muted:#bac4e9;--gold:#ffd166;--mint:#6ef0c2;--pink:#ff7da8;--blue:#7eb7ff}
-*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,#293a76 0,#10152e 55%,#090d20 100%);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}button,input{font:inherit}button{cursor:pointer;touch-action:manipulation}.wrap{width:min(960px,100%);margin:auto;padding:18px 14px 36px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{font-weight:1000;letter-spacing:.4px;font-size:clamp(1.35rem,4vw,2rem)}.brand span{color:var(--gold)}.top-actions{display:flex;gap:8px;flex-wrap:wrap}.pill,.btn{border:1px solid #56649c;background:#202b54;color:var(--ink);padding:10px 14px;border-radius:13px;font-weight:750}.pill[aria-pressed="true"]{background:#34477f;border-color:var(--gold)}.hero{text-align:center;padding:34px 8px 22px}.eyebrow{color:var(--mint);font-size:.8rem;font-weight:900;letter-spacing:2px;text-transform:uppercase}.hero h1{font-size:clamp(2rem,7vw,3.8rem);line-height:1.05;margin:10px 0}.hero p{color:var(--muted);max-width:620px;margin:12px auto}.modes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:22px 0}.mode{background:linear-gradient(145deg,#273565,#1a2142);border:1px solid #46568d;border-radius:22px;padding:24px 20px;text-align:left;color:var(--ink);min-height:190px;transition:transform .15s,border-color .15s}.mode:hover{transform:translateY(-3px);border-color:var(--gold)}.mode .emoji{font-size:2.3rem}.mode h2{margin:12px 0 7px;font-size:1.25rem}.mode p{margin:0;color:var(--muted);line-height:1.5}.tag{display:inline-block;margin-top:15px;padding:6px 10px;border-radius:999px;background:#131a36;color:var(--gold);font-size:.78rem;font-weight:900}.volume{display:flex;align-items:center;gap:7px;font-size:.82rem}.volume input{width:75px;accent-color:var(--gold)}.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;max-width:680px;margin:0 auto}.choice{display:flex;align-items:center;gap:12px;text-align:left;min-height:58px;padding:12px;border-radius:14px;border:1px solid #52629b;background:#111a39;color:var(--ink);font-weight:800}.choice .letter{display:grid;place-items:center;flex:0 0 34px;height:34px;border-radius:10px;background:#303d70;color:var(--gold)}.choice:active{transform:scale(.99)}.choice:disabled{cursor:default;opacity:1}.choice.correct{border-color:var(--mint);background:#153e43}.choice.wrong{border-color:var(--pink);background:#49243d}.choice:focus-visible{outline:3px solid var(--gold)}.game{display:none;background:rgba(27,35,69,.96);border:1px solid #46568d;border-radius:24px;padding:clamp(15px,4vw,28px);box-shadow:0 20px 55px #0004}.game.active{display:block}.gamebar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:.92rem}.progress{height:8px;background:#111831;border-radius:999px;overflow:hidden;margin:14px 0 20px}.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--mint),var(--gold));transition:width .3s}.question{text-align:center}.question h2{font-size:clamp(1.3rem,4vw,2rem);margin:10px 0}.hint{color:var(--muted);margin:0 0 18px}.clue{min-height:180px;display:flex;align-items:center;justify-content:center;gap:clamp(10px,3vw,24px);flex-wrap:wrap;margin:12px auto 20px;padding:18px;border-radius:20px;background:linear-gradient(135deg,#111a39,#202d59);border:1px solid #3c4d84;max-width:680px}.clue .picture{font-size:clamp(3rem,12vw,6.2rem);line-height:1.2;filter:drop-shadow(0 7px 9px #0005)}.clue .symbol{font-size:clamp(1.5rem,5vw,2.5rem);color:var(--gold);font-weight:1000}.clue .wordtile{font-size:clamp(1.25rem,4vw,2.1rem);font-weight:1000;letter-spacing:2px;padding:12px 15px;background:#303d70;border-radius:12px;border-bottom:4px solid #101831}.clue .mini{font-size:clamp(1.5rem,6vw,3rem)}.answerrow{display:flex;gap:9px;max-width:600px;margin:0 auto}.answerrow input{min-width:0;flex:1;background:#0f1630;border:1px solid #52629b;border-radius:13px;color:white;padding:14px;font-size:1.05rem;outline:none}.answerrow input:focus{border-color:var(--mint)}.btn.primary{background:linear-gradient(120deg,#f8bd4d,#ffdc7d);color:#1c2340;border:0}.btn:disabled{opacity:.45;cursor:not-allowed}.feedback{min-height:32px;margin:14px 0 4px;text-align:center;font-weight:800}.feedback.good{color:var(--mint)}.feedback.bad{color:var(--pink)}.gamefoot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}.small{font-size:.86rem;color:var(--muted)}.end{text-align:center;padding:30px 10px}.end .big{font-size:4rem}.end h2{font-size:2rem}.end p{color:var(--muted)}.note{text-align:center;color:#98a7d9;font-size:.8rem;margin:25px 0 0}.hide{display:none!important}canvas#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:10}.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:12;background:#152044;border:1px solid #6ef0c2;padding:11px 18px;border-radius:14px;font-weight:900;box-shadow:0 8px 30px #0006;display:none}.toast.show{display:block;animation:pop .25s ease-out}@keyframes pop{from{transform:translateX(-50%) scale(.8);opacity:0}to{transform:translateX(-50%) scale(1);opacity:1}}
-@media(max-width:600px){.volume{padding:7px 9px}.volume input{width:60px}.choices{grid-template-columns:1fr}.wrap{padding:12px 10px 24px}.modes{grid-template-columns:1fr}.mode{min-height:0;padding:19px}.hero{padding:25px 4px 12px}.clue{min-height:150px}.answerrow{flex-direction:column}.answerrow .btn{width:100%;padding:13px}.gamefoot .btn{flex:1}.top-actions button{padding:9px 10px}}
-
-/* Visual redesign inspired by the supplied reference image */
 :root{--bg:#06194d;--panel:#102b70;--panel2:#123a8a;--ink:#fffdf6;--muted:#d5e7ff;--gold:#ffd43b;--mint:#50ffe1;--pink:#ff85cf;--blue:#5bcaff}
-body{overflow-x:hidden;background:radial-gradient(ellipse at 50% 35%,#1767b5 0,#092c78 38%,#03103c 78%,#02082b 100%);background-attachment:fixed}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;overflow-x:hidden;background:radial-gradient(ellipse at 50% 35%,#1767b5 0,#092c78 38%,#03103c 78%,#02082b 100%);background-attachment:fixed}
 body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;background:linear-gradient(180deg,#04103b33 0%,transparent 40%,#02082b88 100%),radial-gradient(circle at 8% 55%,#3fc8ff33 0 2px,transparent 3px),radial-gradient(circle at 88% 43%,#fff6 0 2px,transparent 3px),radial-gradient(circle at 20% 25%,#ffd166aa 0 2px,transparent 3px),radial-gradient(circle at 75% 17%,#fff7 0 2px,transparent 3px)}
-.wrap{width:min(1180px,100%);padding:16px 18px 30px;position:relative}.top{display:grid;grid-template-columns:minmax(200px,1fr) minmax(190px,.9fr) minmax(230px,1.35fr) auto auto;align-items:start;gap:10px;position:relative;min-height:135px}.audio-panel{background:linear-gradient(135deg,#172f87f2,#111b5df2);border:2px solid #584bff;border-radius:17px;padding:10px 13px;box-shadow:0 0 18px #292cff55;min-width:0}.audio-title{display:flex;align-items:center;gap:9px;font-size:clamp(.72rem,1.4vw,.98rem);white-space:nowrap}.round-icon{display:grid;place-items:center;width:30px;height:30px;flex:none;border-radius:50%;background:#3156d5;color:#fff;font-size:1.2rem}.toggle{margin-left:auto;width:52px;height:28px;border:0;border-radius:99px;background:#33466d;padding:3px;flex:none}.toggle span{display:block;width:22px;height:22px;background:white;border-radius:50%;transition:transform .2s}.toggle[aria-pressed="true"]{background:#00ce86}.toggle[aria-pressed="true"] span{transform:translateX(24px)}.sliderline{display:flex;align-items:center;gap:8px;margin-top:7px;font-size:.82rem;color:#e6f3ff}.sliderline input{width:100%;min-width:30px;accent-color:#22c8ff}.sliderline span{font-size:.72rem}.sound-hidden{display:none}.top-brand{text-align:center;grid-column:3;grid-row:1;align-self:start;position:relative;margin-top:-12px;filter:drop-shadow(0 7px 0 #06113d)}.top-brand .crown{font-size:2.5rem;line-height:1;margin-bottom:-8px}.top-brand .brand{font-size:clamp(2.1rem,5vw,4.2rem);font-weight:1000;line-height:.9;color:#ffdf30;-webkit-text-stroke:2px #8f2409;text-shadow:2px 4px 0 #a83205,0 0 14px #ffdb42;letter-spacing:1px}.brand-ribbon{display:inline-block;background:linear-gradient(#2edaff,#0872f4);border:3px solid #ffdb48;border-radius:8px 8px 20px 20px;padding:3px 15px 7px;font-weight:1000;font-size:clamp(1.1rem,2.7vw,2.1rem);color:white;-webkit-text-stroke:1px #0341a2;text-shadow:1px 3px 0 #0341a2;transform:rotate(-2deg)}.motto{font-size:.8rem;font-weight:900;margin-top:5px;color:white}.highscore{display:flex;align-items:center;gap:10px;padding:10px 14px;border:2px solid #1769ff;border-radius:19px;background:#071849cc;min-width:145px;text-align:center}.highscore>span{font-size:2rem}.highscore div{display:grid;gap:3px}.highscore strong{font-size:.8rem}.highscore b{font-size:1.35rem;color:#ffdf3f}.round-tool{border:2px solid #245bd2;background:#081b4b;color:white;width:50px;height:50px;border-radius:50%;font-size:1.6rem;font-weight:900;box-shadow:0 0 12px #278aff33}.hero{padding:0 5px 15px;margin-top:-3px}.hero-subtitle{display:none}.hero h1{display:none}.hero>p{display:none}.hero:after{content:"";display:block;height:0}.modes{gap:22px;margin:4px 0 18px;position:relative}.mode{position:relative;overflow:hidden;min-height:310px;padding:20px 22px 18px;border-radius:26px;border:3px solid #ffb52e;box-shadow:0 9px 0 #7c330d,0 0 20px #ffbd3055;text-align:center;color:white;background:radial-gradient(circle at 10% 85%,#ff8d17 0 5%,transparent 28%),linear-gradient(145deg,#ffce48,#ff8b18 70%,#d94b13)}.mode:before{content:"";position:absolute;inset:7px;border:1px solid #fff7a0;border-radius:18px;pointer-events:none}.mode:hover{transform:translateY(-3px) scale(1.005);border-color:#fff06a}.mode-heading{display:flex;align-items:center;justify-content:center;gap:10px;position:relative;z-index:1}.mode-icon{display:grid;place-items:center;flex:none;width:74px;height:74px;background:radial-gradient(#fff5c0,#ffbd35);border:4px solid #ff8d11;border-radius:50%;font-size:2.7rem;box-shadow:0 4px 0 #a64c12}.mode h2{margin:0;font-size:clamp(1.1rem,2.6vw,2rem);font-weight:1000;text-shadow:2px 3px 0 #a13b0d;letter-spacing:-.5px}.mode-desc{position:relative;z-index:1;display:grid;gap:4px;background:#fff2bf;color:#a43112;border-radius:22px;padding:12px 7px;margin:9px auto 7px;max-width:390px}.mode-desc strong{font-size:clamp(.9rem,1.7vw,1.2rem)}.mode-desc span{font-size:.9rem;font-weight:750}.mascot{position:relative;z-index:1;min-height:95px;font-size:4rem;line-height:1.2;text-shadow:0 3px 0 #a24b20}.mascot span{display:inline-block;font-size:2.3rem;background:#fff9d9;border-radius:50%;padding:8px}.start-label{position:relative;z-index:1;display:block;margin:2px auto 0;max-width:280px;padding:13px 12px;border:3px solid #ffdd51;border-radius:999px;background:linear-gradient(#ffec62,#ffb400);box-shadow:0 5px 0 #b64e0c;color:white;font-size:clamp(1rem,2.3vw,1.55rem);font-weight:1000;text-shadow:1px 2px 0 #a83d08}.rebus-mode{border-color:#39ffff;box-shadow:0 9px 0 #0753a7,0 0 22px #00ffff66;background:radial-gradient(circle at 85% 90%,#007cff 0 5%,transparent 30%),linear-gradient(145deg,#48f8ef,#00b8d7 70%,#0877df)}.rebus-mode .mode-icon{background:radial-gradient(#fff,#8dfaff);border-color:#2bf7ff}.rebus-mode h2{text-shadow:2px 3px 0 #0756b1}.rebus-mode .mode-desc{background:#d3ffff;color:#064ca4}.rebus-mode .start-label{background:linear-gradient(#66ffb8,#00c98d);border-color:#a6ffe5;box-shadow:0 5px 0 #087e87;text-shadow:1px 2px 0 #087e87}.feature-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:2px solid #1265d5;border-radius:25px;background:#041747d9;padding:12px 8px;margin:14px 0 10px}.feature-strip>div{display:flex;align-items:center;justify-content:center;gap:10px;padding:4px 9px;border-right:1px solid #1d5bb3}.feature-strip>div:last-child{border-right:0}.feature-strip>div>span{font-size:2rem}.feature-strip b{display:grid;font-size:.88rem;gap:3px}.feature-strip small{font-size:.7rem;color:#bddcff;font-weight:500}.bottom-slogan{text-align:center;font-size:clamp(.95rem,2vw,1.45rem);font-style:italic;font-weight:800;color:#e5eeff;text-shadow:0 2px 10px #278bff;margin:15px 0}.note{color:#c6ddff}.firework-decor{position:absolute;top:140px;font-size:clamp(3rem,8vw,6rem);opacity:.9;pointer-events:none;filter:drop-shadow(0 0 18px #ff62f5)}.firework-decor.left{left:0}.firework-decor.right{right:0}.game{background:linear-gradient(145deg,#0a2868f5,#11194df5);border:2px solid #3177ff;box-shadow:0 20px 55px #0008}.choice{background:#091b4b;border-color:#2c68ca}.choice .letter{background:#174da6;color:#ffe35c}.clue{background:linear-gradient(135deg,#06275f,#133b83);border-color:#2a70c9}
-@media(max-width:800px){.top{grid-template-columns:1fr 1fr;min-height:0}.top-brand{grid-column:1/3;grid-row:1;margin:4px 0 12px}.music-panel{grid-column:1;grid-row:2}.sfx-panel{grid-column:2;grid-row:2}.highscore{grid-column:1;grid-row:3}.round-tool{grid-row:3}.modes{margin-top:8px}.mode{min-height:280px}.firework-decor{top:170px}}
-@media(max-width:560px){.wrap{padding:8px 9px 22px}.top{gap:7px;grid-template-columns:1fr 1fr}.audio-panel{padding:8px;border-radius:12px}.audio-title{gap:5px;font-size:.7rem}.round-icon{width:25px;height:25px;font-size:1rem}.toggle{width:43px;height:25px}.toggle span{width:19px;height:19px}.toggle[aria-pressed="true"] span{transform:translateX(18px)}.sliderline{gap:4px;font-size:.7rem}.sliderline input{width:45px}.top-brand .brand{font-size:2.5rem}.brand-ribbon{font-size:1.35rem}.highscore{min-width:0;padding:7px}.highscore>span{font-size:1.5rem}.highscore strong{font-size:.7rem}.round-tool{width:42px;height:42px;font-size:1.3rem}.modes{grid-template-columns:1fr;gap:14px}.mode{min-height:270px;padding:16px 12px}.mode-icon{width:57px;height:57px;font-size:2rem}.mode h2{font-size:1.2rem}.mode-desc{padding:9px}.mascot{min-height:70px;font-size:3rem}.feature-strip{grid-template-columns:1fr 1fr;border-radius:17px}.feature-strip>div{justify-content:flex-start;border-right:0;padding:8px}.feature-strip>div:nth-child(odd){border-right:1px solid #1d5bb3}.feature-strip>div:nth-child(-n+2){border-bottom:1px solid #1d5bb3}.feature-strip>div>span{font-size:1.6rem}.feature-strip b{font-size:.78rem}.feature-strip small{font-size:.65rem}.firework-decor{top:165px;font-size:2.8rem}.hero{padding:0}.game{padding:14px;border-radius:18px}}
-</style></head>
-<body><canvas id="fx"></canvas><div class="toast" id="toast">🎉 Chính xác!</div>
+button,input{font:inherit}button{cursor:pointer;touch-action:manipulation}
+.wrap{width:min(1180px,100%);margin:auto;padding:16px 18px 30px;position:relative}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.audio-panel{background:linear-gradient(135deg,#172f87f2,#111b5df2);border:2px solid #584bff;border-radius:17px;padding:10px 13px;box-shadow:0 0 18px #292cff55;min-width:220px}
+.audio-title{display:flex;align-items:center;gap:9px;font-size:clamp(.72rem,1.4vw,.98rem);white-space:nowrap}
+.round-icon{display:grid;place-items:center;width:30px;height:30px;flex:none;border-radius:50%;background:#3156d5;color:#fff;font-size:1.2rem}
+.toggle{margin-left:auto;width:52px;height:28px;border:0;border-radius:99px;background:#33466d;padding:3px;flex:none;position:relative}
+.toggle span{display:block;width:22px;height:22px;background:white;border-radius:50%;transition:transform .2s}
+.toggle[aria-pressed="true"]{background:#00ce86}
+.toggle[aria-pressed="true"] span{transform:translateX(24px)}
+.sliderline{display:flex;align-items:center;gap:8px;margin-top:7px;font-size:.82rem;color:#e6f3ff}
+.sliderline input{width:100%;min-width:30px;accent-color:#22c8ff}
+.top-brand{text-align:center;position:relative;filter:drop-shadow(0 4px 6px rgba(0,0,0,0.3))}
+.top-brand .crown{font-size:2rem;line-height:1}
+.brand{font-weight:1000;letter-spacing:.4px;font-size:clamp(1.35rem,4vw,2rem);margin:0}
+.brand span{color:var(--gold)}
+.hero{text-align:center;padding:34px 8px 22px}
+.eyebrow{color:var(--mint);font-size:.8rem;font-weight:900;letter-spacing:2px;text-transform:uppercase}
+.hero h1{font-size:clamp(2rem,7vw,3.8rem);line-height:1.05;margin:10px 0}
+.hero p{color:var(--muted);max-width:620px;margin:12px auto}
+.modes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:22px 0}
+.mode{background:linear-gradient(145deg,#172f87,#111b5d);border:1px solid #46568d;border-radius:22px;padding:24px 20px;text-align:left;color:var(--ink);min-height:190px;transition:transform .15s,border-color .15s}
+.mode:hover{transform:translateY(-3px);border-color:var(--gold)}
+.mode .emoji{font-size:2.3rem}
+.mode h2{margin:12px 0 7px;font-size:1.25rem}
+.mode p{margin:0;color:var(--muted);line-height:1.5}
+.tag{display:inline-block;margin-top:15px;padding:6px 10px;border-radius:999px;background:#06194d;color:var(--gold);font-size:.78rem;font-weight:900}
+.game{display:none;background:rgba(16,43,112,.96);border:2px solid #52629b;border-radius:24px;padding:clamp(15px,4vw,28px);box-shadow:0 20px 55px #0004;max-width:720px;margin:20px auto}
+.game.active{display:block}
+.gamebar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:.92rem}
+.progress{height:8px;background:#06194d;border-radius:999px;overflow:hidden;margin:14px 0 20px}
+.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--mint),var(--gold));transition:width .3s}
+.question{text-align:center}
+.question h2{font-size:clamp(1.3rem,4vw,2rem);margin:10px 0}
+.hint{color:var(--muted);margin:0 0 18px}
+.clue{min-height:140px;display:flex;align-items:center;justify-content:center;gap:clamp(10px,3vw,24px);flex-wrap:wrap;margin:12px auto 20px;padding:18px;border-radius:20px;background:linear-gradient(135deg,#06194d,#123a8a);border:1px solid #3c4d84;max-width:680px}
+.clue .wordtile{font-size:clamp(1.5rem,4vw,2.5rem);font-weight:1000;letter-spacing:4px;padding:12px 20px;background:#172f87;border-radius:12px;border-bottom:4px solid #06194d}
+.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;max-width:680px;margin:0 auto}
+.choice{display:flex;align-items:center;gap:12px;text-align:left;min-height:58px;padding:12px;border-radius:14px;border:1px solid #52629b;background:#06194d;color:var(--ink);font-weight:800;width:100%}
+.choice .letter{display:grid;place-items:center;flex:0 0 34px;height:34px;border-radius:10px;background:#123a8a;color:var(--gold)}
+.choice:active{transform:scale(.99)}
+.choice.correct{border-color:var(--mint);background:#0a4744}
+.choice.wrong{border-color:var(--pink);background:#4c1737}
+.answerrow{display:flex;gap:9px;max-width:680px;margin:0 auto}
+.answerrow input{min-width:0;flex:1;background:#06194d;border:1px solid #52629b;border-radius:13px;color:white;padding:14px;font-size:1.05rem;outline:none}
+.answerrow input:focus{border-color:var(--mint)}
+.btn{border:1px solid #52629b;background:#123a8a;color:var(--ink);padding:10px 18px;border-radius:13px;font-weight:750}
+.btn.primary{background:linear-gradient(120deg,#f8bd4d,#ffdc7d);color:#06194d;border:0}
+.feedback{min-height:32px;margin:14px 0 4px;text-align:center;font-weight:800}
+.feedback.good{color:var(--mint)}
+.feedback.bad{color:var(--pink)}
+.gamefoot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}
+.hide{display:none !important}
+@media(max-width:600px){
+  .choices{grid-template-columns:1fr}
+  .modes{grid-template-columns:1fr}
+  .answerrow{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
 <div class="wrap">
-<header class="top">
-<div class="audio-panel music-panel"><div class="audio-title"><span class="round-icon">♫</span><strong>Nhạc nền</strong><button class="toggle" id="musicBtn" aria-pressed="false" aria-label="Bật tắt nhạc nền"><span></span></button></div><label class="sliderline">♪ <input id="musicVolume" type="range" min="0" max="100" value="90" aria-label="Âm lượng nhạc nền"><span id="musicVolLabel">90%</span></label></div>
-<div class="audio-panel sfx-panel"><div class="audio-title"><span class="round-icon">🔊</span><strong>Âm thanh hiệu ứng</strong></div><label class="sliderline">♪ <input id="sfxVolume" type="range" min="0" max="100" value="70" aria-label="Âm lượng hiệu ứng"><span id="sfxVolLabel">70%</span></label><button class="sound-hidden" id="soundBtn" aria-pressed="true">Âm thanh: Bật</button></div>
-<div class="top-brand"><div class="crown">👑</div><div class="brand">VUA</div><div class="brand-ribbon">TIẾNG VIỆT</div><div class="motto">Chơi thông minh – Vững tiếng Việt</div></div>
-<div class="highscore"><span>🏆</span><div><strong>Điểm cao nhất</strong><b id="highScore">0</b></div></div><button class="round-tool" id="settingsBtn" aria-label="Cài đặt">⚙</button><button class="round-tool" id="helpBtn" aria-label="Hướng dẫn">?</button>
-</header>
-<section id="home"><div class="firework-decor left">🎆</div><div class="firework-decor right">🎇</div><div class="hero"><div class="hero-subtitle">SÂN CHƠI NGÔN NGỮ</div><h1>VUA <span>TIẾNG VIỆT</span></h1><p class="hero-motto">Chơi thông minh – Vững tiếng Việt</p></div>
-<div class="modes"><button class="mode hard-mode" data-mode="hard"><div class="mode-heading"><span class="mode-icon">🧠</span><h2>CHẾ ĐỘ KHÓ</h2></div><div class="mode-desc"><strong>20 câu đố mẹo tiếng Việt</strong><span>Đoán đúng – Thử thách trí tuệ!</span></div><div class="mascot">🧒🏻❓</div><span class="start-label">▶ BẮT ĐẦU</span></button><button class="mode rebus-mode" data-mode="rebus"><div class="mode-heading"><span class="mode-icon">🖼️</span><h2>ĐUỔI HÌNH BẮT CHỮ</h2></div><div class="mode-desc"><strong>20 câu đuổi hình hấp dẫn</strong><span>Nhìn hình – Đoán chữ!</span></div><div class="mascot">🧒🏻💭 <span>⛰️ + 🐕</span></div><span class="start-label">▶ BẮT ĐẦU</span></button></div>
-<div class="feature-strip"><div><span>🎁</span><b>40 câu hỏi<small>(20 + 20)</small></b></div><div><span>🎵</span><b>Nhạc nền lớn<small>Có thể chỉnh âm lượng</small></b></div><div><span>🎆</span><b>Pháo hoa<small>Khi trả lời đúng và hoàn thành</small></b></div><div><span>📱</span><b>Tối ưu<small>Máy tính & điện thoại</small></b></div></div><p class="bottom-slogan">✦ Tiếng Việt – Kết nối tri thức, lan tỏa yêu thương ✦</p><p class="note">Bấm “Bắt đầu” để chơi. Bật nhạc bằng công tắc góc trên trái nhé!</p></section>
-<section class="game" id="game"><div class="gamebar"><button class="pill" id="homeBtn">← Chọn chế độ</button><strong id="modeName">Chế độ</strong><span id="count">Câu 1/12</span></div><div class="progress"><span id="bar"></span></div><div id="questionArea" class="question"><h2 id="qTitle">Câu hỏi</h2><p class="hint" id="qHint"></p><div class="clue" id="clue"></div><div id="choices" class="choices" aria-label="Chọn đáp án A B C D"></div><form class="answerrow hide" id="answerForm"><input id="answer" autocomplete="off" autocapitalize="off" placeholder="Nhập đáp án của bạn…" aria-label="Đáp án" required><button class="btn primary" type="submit">Trả lời ↵</button></form><div class="feedback" id="feedback" aria-live="polite"></div><div class="gamefoot"><span class="small" id="score">Điểm: 0</span><button class="btn" id="hintBtn">Gợi ý</button><button class="btn primary hide" id="nextBtn">Câu tiếp theo →</button></div></div><div id="endArea" class="end hide"><div class="big">🏆</div><h2>Hoàn thành thử thách!</h2><p id="resultText"></p><button class="btn primary" id="againBtn">Chơi lại chế độ này</button> <button class="btn" id="homeBtn2">Chọn chế độ khác</button></div></section>
-<footer class="note">Một trò chơi nhỏ để luyện tư duy và tiếng Việt ✨</footer></div>
+  <!-- Thanh menu phía trên -->
+  <div class="top">
+    <div class="audio-panel">
+      <div class="audio-title">
+        <div class="round-icon">🔊</div>
+        <span>Âm thanh nền</span>
+        <button class="toggle" aria-pressed="false" id="audioToggle"><span></span></button>
+      </div>
+      <div class="sliderline">
+        <span>Âm lượng</span>
+        <input type="range" min="0" max="100" value="50" id="volumeSlider">
+      </div>
+    </div>
+
+    <div class="top-brand">
+      <div class="crown">👑</div>
+      <h2 class="brand">Vua <span>Tiếng Việt</span></h2>
+    </div>
+    <div></div><div></div> <!-- Giữ khoảng trống layout -->
+  </div>
+
+  <!-- Màn hình chính chọn chế độ -->
+  <div id="homeScreen">
+    <div class="hero">
+      <span class="eyebrow">Thử thách ngôn ngữ</span>
+      <h1>Ai là Vua Tiếng Việt?</h1>
+      <p>Vượt qua các câu đố sắp xếp từ và thử tài phản xạ nhanh nhạy với kho từ vựng phong phú.</p>
+    </div>
+
+    <div class="modes">
+      <button class="mode" onclick="startGame('quiz')">
+        <div class="emoji">🧩</div>
+        <h2>Trắc Nghiệm</h2>
+        <p>Chọn phương án đúng nhất để hoàn thành từ hoặc câu có nghĩa.</p>
+        <span class="tag">Dễ chơi</span>
+      </button>
+
+      <button class="mode" onclick="startGame('arrange')">
+        <div class="emoji">✏️</div>
+        <h2>Sắp Xếp Từ</h2>
+        <p>Gõ lại đáp án hoàn chỉnh từ các ký tự bị đảo lộn vị trí.</p>
+        <span class="tag">Thách thức</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Khu vực chơi Game -->
+  <div class="game" id="gameScreen">
+    <div class="gamebar">
+      <span id="gameModeTitle">Chế độ: Trắc nghiệm</span>
+      <span id="scoreTracker">Điểm: 0</span>
+    </div>
+    <div class="progress"><span id="progressBar"></span></div>
+
+    <div class="question">
+      <h2 id="questionPrompt">Hãy tìm từ đúng nghĩa bên dưới</h2>
+      <p class="hint" id="hintText">Gợi ý: Từ chỉ một bộ phận trên cơ thể</p>
+      
+      <!-- Khung chứa từ bị xáo trộn (Dành cho chế độ sắp xếp) -->
+      <div class="clue" id="clueContainer">
+        <div class="wordtile" id="shuffledWord">T / I / Ế / N / G</div>
+      </div>
+
+      <!-- Giao diện Chế độ Trắc nghiệm -->
+      <div class="choices" id="quizInterface">
+        <button class="choice" onclick="checkQuizAnswer(this, 0)"><span class="letter">A</span> <span class="text">Đáp án A</span></button>
+        <button class="choice" onclick="checkQuizAnswer(this, 1)"><span class="letter">B</span> <span class="text">Đáp án B</span></button>
+        <button class="choice" onclick="checkQuizAnswer(this, 2)"><span class="letter">C</span> <span class="text">Đáp án C</span></button>
+        <button class="choice" onclick="checkQuizAnswer(this, 3)"><span class="letter">D</span> <span class="text">Đáp án D</span></button>
+      </div>
+
+      <!-- Giao diện Chế độ Sắp xếp từ (Gõ đáp án) -->
+      <div class="answerrow hide" id="arrangeInterface">
+        <input type="text" id="userInput" placeholder="Nhập câu trả lời của bạn..." onkeyup="if(event.key==='Enter') submitArrangeAnswer()">
+        <button class="btn primary" onclick="submitArrangeAnswer()">Gửi đi</button>
+      </div>
+
+      <div class="feedback" id="feedbackMessage"></div>
+
+      <div class="gamefoot">
+        <button class="btn" onclick="quitGame()">Trở về màn hình chính</button>
+        <button class="btn primary hide" id="nextBtn" onclick="nextQuestion()">Câu tiếp theo ➡️</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
-const data={
-hard:[
-{q:'Con mèo nào đi bằng hai chân?',hint:'Nghĩ đến một chú mèo hoạt hình nổi tiếng.',answer:['mèo doraemon'],explain:'Doraemon là chú mèo máy hoạt hình thường đi bằng hai chân.'},
-{q:'Con chuột nào đi bằng hai chân?',hint:'Nhân vật chuột nổi tiếng của Disney.',answer:['chuột mickey'],explain:'Chuột Mickey là nhân vật hoạt hình đi bằng hai chân.'},
-{q:'Cái gì càng lau càng bẩn?',hint:'Đồ vật gom bụi bẩn trong lúc lau chùi.',answer:['cái giẻ lau','giẻ lau'],explain:'Giẻ lau càng lau thì càng bám bẩn.'},
-{q:'Bệnh gì bác sĩ phải bó tay?',hint:'Chơi chữ: bác sĩ có thể phải bó bột bộ phận nào?',answer:['gãy tay','bệnh gãy tay'],explain:'Đây là câu đố mẹo: gãy tay thì có thể phải bó bột.'},
-{q:'Lịch nào dài nhất?',hint:'Không phải lịch treo tường hay lịch để bàn.',answer:['lịch sử'],explain:'Lịch sử là dòng thời gian dài của những sự kiện đã xảy ra.'},
-{q:'Xã đông nhất là xã nào?',hint:'Chơi chữ với từ “xã”.',answer:['xã hội'],explain:'“Xã hội” là cộng đồng người, đông hơn một xã hành chính.'},
-{q:'Con đường nào dài nhất?',hint:'Hành trình gắn với cuộc sống của mỗi người.',answer:['đường đời'],explain:'“Đường đời” là cách nói hình tượng về hành trình sống.'},
-{q:'Cái gì có miệng mà không
+// --- LOGIC XỬ LÝ ÂM THANH ---
+const audioToggle = document.getElementById('audioToggle');
+const volumeSlider = document.getElementById('volumeSlider');
+let isAudioOn = false;
+
+audioToggle.addEventListener('click', function() {
+  isAudioOn = !isAudioOn;
+  this.setAttribute('aria-pressed', isAudioOn);
+  
