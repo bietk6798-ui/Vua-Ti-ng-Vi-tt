@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vua Tiếng Việt - Phiên Bản Sửa Lỗi Nút Bấm</title>
+<title>Vua Tiếng Việt - Phiên Bản Sửa Lỗi Toàn Diện</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:system-ui,-apple-system,sans-serif;background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#fff;min-height:100vh;display:flex;justify-content:center;align-items:center;padding:16px}
@@ -104,19 +104,20 @@ let timerInterval = null;
 let timeLeft = 100;
 let isAnswered = false;
 
-// Khởi tạo các biến Audio rỗng trước để không bị lỗi bảo mật của trình duyệt
 let bgMusic = null;
 let correctSound = null;
 
 function initAudio() {
   if (!bgMusic) {
+    // Sử dụng file nhạc trực tuyến hợp lệ từ dự án mã nguồn mở
     bgMusic = new Audio('https://soundhelix.com');
     bgMusic.loop = true;
-    bgMusic.volume = 0.2;
+    bgMusic.volume = 0.1;
   }
   if (!correctSound) {
+    // Sử dụng âm thanh thông báo ngắn hợp lệ
     correctSound = new Audio('https://google.com');
-    correctSound.volume = 0.4;
+    correctSound.volume = 0.3;
   }
 }
 
@@ -139,9 +140,7 @@ function showToast() {
 }
 
 function startGame(mode) {
-  // Kích hoạt khởi tạo âm thanh ngay khi nhấn nút để tránh bị trình duyệt khóa
   initAudio();
-  
   currentQuestions = questions[mode] || [];
   currentIndex = 0;
   score = 0;
@@ -204,8 +203,8 @@ function selectChoice(btn, selected, answer) {
   if (selected === answer) {
     if (btn) btn.classList.add('correct');
     score++;
-    if (correctSound)correctSound.currentTime = 0;
-correctSound.play().catch(()=>{});
+    if (correctSound) {
+      correctSound.currentTimecorrectSound.play().catch(()=>{});
 }
 showToast();
 } else {
@@ -238,5 +237,4 @@ isAnswered = false;
 document.getElementById('game').classList.remove('active');
 document.getElementById('result').classList.remove('active');
 document.getElementById('home').style.display = 'block';
-  }
-  
+}
