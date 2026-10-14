@@ -3,25 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vua Tiếng Việt - Phiên Bản Sửa Lỗi Toàn Diện</title>
+<title>Vua Tiếng Việt</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:system-ui,-apple-system,sans-serif;background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#fff;min-height:100vh;display:flex;justify-content:center;align-items:center;padding:16px}
 .container{background:rgba(15,23,42,.95);border:2px solid #3b82f6;border-radius:20px;padding:24px;max-width:480px;width:100%;box-shadow:0 20px 40px rgba(0,0,0,.4)}
 h1{text-align:center;font-size:1.9rem;margin-bottom:6px;color:#fbbf24}
-.subtitle{text-align:center;color:#93c5fd;margin-bottom:18px;font-size:.95rem}
+.subtitle{text-align:center;color:#93c5fd;margin-bottom:22px;font-size:.95rem}
 .modes{display:grid;gap:12px}
 .mode-btn{background:linear-gradient(135deg,#f59e0b,#d97706);border:none;color:#fff;padding:16px;border-radius:14px;font-size:1.1rem;font-weight:700;cursor:pointer}
 .mode-btn.rebus{background:linear-gradient(135deg,#06b6d4,#0891b2)}
 .mode-btn:active{transform:scale(.97)}
 .game,.result{display:none}
 .game.active,.result.active{display:block}
-.timer-container{width:100%;height:6px;background:#334155;border-radius:3px;margin-bottom:16px;overflow:hidden}
-.timer-bar{width:100%;height:100%;background:#ef4444;transition:width 0.1s linear}
-.question{font-size:1.35rem;font-weight:700;margin-bottom:10px;text-align:center;line-height:1.4;min-height:60px;display:flex;align-items:center;justify-content:center}
+.question{font-size:1.25rem;font-weight:700;margin-bottom:10px;text-align:center;line-height:1.4}
 .hint{text-align:center;color:#94a3b8;margin-bottom:18px;font-size:.9rem}
 .choices{display:grid;gap:10px}
-.choice{background:#1e293b;border:2px solid #334155;color:#fff;padding:13px;border-radius:12px;font-size:1rem;text-align:left;cursor:pointer;width:100%}
+.choice{background:#1e293b;border:2px solid #334155;color:#fff;padding:13px;border-radius:12px;font-size:1rem;text-align:left;cursor:pointer}
 .choice.correct{background:#065f46;border-color:#10b981}
 .choice.wrong{background:#7f1d1d;border-color:#ef4444}
 .score{text-align:center;margin:16px 0;font-size:1.05rem}
@@ -31,28 +29,20 @@ h1{text-align:center;font-size:1.9rem;margin-bottom:6px;color:#fbbf24}
 .btn-secondary{background:#334155;color:#fff}
 .result{text-align:center}
 .result h2{color:#fbbf24;margin-bottom:10px}
-.music-btn{display:block;margin:0 auto 16px;padding:8px 16px;border-radius:20px;border:1px solid #3b82f6;background:#1e293b;color:#93c5fd;font-size:.9rem;cursor:pointer}
-.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#065f46;color:#fff;padding:12px 24px;border-radius:12px;font-weight:700;z-index:99;display:none;box-shadow:0 8px 20px rgba(0,0,0,.3)}
-.toast.show{display:block;animation:pop .3s ease}
-@keyframes pop{from{transform:translateX(-50%) scale(.7);opacity:0}to{transform:translateX(-50%) scale(1);opacity:1}}
 </style>
 </head>
 <body>
-<div class="toast" id="toast">🎉 Chính xác! +1 điểm</div>
-
 <div class="container">
   <div id="home">
     <h1>👑 VUA TIẾNG VIỆT</h1>
     <p class="subtitle">Chơi thông minh – Vững tiếng Việt</p>
-    <button class="music-btn" id="musicBtn" onclick="toggleMusic()">🎵 Bật nhạc nền</button>
     <div class="modes">
-      <button class="mode-btn" onclick="startGame('hard')">🧠 Chế độ Khó (10s)</button>
-      <button class="mode-btn rebus" onclick="startGame('easy')">🖼️ Đuổi hình bắt chữ (10s)</button>
+      <button class="mode-btn" onclick="startGame('hard')">🧠 Chế độ Khó</button>
+      <button class="mode-btn rebus" onclick="startGame('easy')">🖼️ Đuổi hình bắt chữ</button>
     </div>
   </div>
 
   <div class="game" id="game">
-    <div class="timer-container"><div class="timer-bar" id="timerBar"></div></div>
     <div class="question" id="question"></div>
     <div class="hint" id="hint"></div>
     <div class="choices" id="choices"></div>
@@ -73,74 +63,26 @@ h1{text-align:center;font-size:1.9rem;margin-bottom:6px;color:#fbbf24}
 <script>
 const questions = {
   hard: [
-    {q:"🐱 Con mèo nào đi bằng hai chân?", hint:"Nhân vật hoạt hình nổi tiếng", a:"Mèo Doraemon", options:["Mèo Tom","Mèo Doraemon","Mèo Garfield","Mèo Hello Kitty"]},
-    {q:"🧹 Cái gì càng lau càng bẩn?", hint:"Dùng để lau nhà", a:"Giẻ lau", options:["Khăn mặt","Giẻ lau","Chổi","Nước lau sàn"]},
-    {q:"🤕 Bệnh gì bác sĩ phải bó tay?", hint:"Chơi chữ câu đố", a:"Gãy tay", options:["Cảm cúm","Đau bụng","Gãy tay","Sốt xuất huyết"]},
-    {q:"📜 Lịch nào dài nhất?", hint:"Không phải lịch treo tường", a:"Lịch sử", options:["Lịch âm","Lịch dương","Lịch sử","Lịch vạn niên"]},
-    {q:"👥 Xã nào đông nhất?", hint:"Chơi chữ với từ 'xã'", a:"Xã hội", options:["Xã An Bình","Xã hội","Xã Trung Tâm","Xã Hòa Bình"]},
-    {q:"🛤️ Con đường nào dài nhất?", hint:"Gắn với cuộc đời con người", a:"Đường đời", options:["Đường cao tốc","Đường đời","Đường quốc lộ","Đường mòn"]},
-    {q:"🍾 Cái gì có miệng mà không nói?", hint:"Đồ dùng chứa nước", a:"Cái chai", options:["Cái túi","Cái chai","Cái hộp","Cái miệng"]},
-    {q:"🦜 Con gì biết nói tiếng người?", hint:"Không phải loài người", a:"Con vẹt", options:["Con khỉ","Con vẹt","Con chó","Con mèo"]},
-    {q:"🦷 Cái gì của mình nhưng người khác dùng nhiều hơn?", hint:"Dùng khi gọi nhau", a:"Cái tên", options:["Cái tên","Số điện thoại","Tiền bạc","Dấu vân tay"]},
-    {q:"🍉 Quả gì năm mắt bảy đuôi?", hint:"Trái cây có gai, vỏ chín màu vàng", a:"Quả mít", options:["Quả dứa","Quả mít","Quả sầu riêng","Quả thanh long"]},
-    {q:"💧 Cái gì rơi xuống nước không ướt?", hint:"Hiện tượng quang học", a:"Cái bóng", options:["Lá cây","Cái bóng","Giọt dầu","Tờ giấy quay"]},
-    {q:"🍽️ Con gì sinh ra đã làm vua?", hint:"Chơi chữ loài động vật dưới nước", a:"Con cua", options:["Con cá hổ","Con sư tử","Con cua","Con rồng"]}
+    {q:"Con mèo nào đi bằng hai chân?", hint:"Nhân vật hoạt hình nổi tiếng", a:"Mèo Doraemon", options:["Mèo Tom","Mèo Doraemon","Mèo Garfield","Mèo Hello Kitty"]},
+    {q:"Cái gì càng lau càng bẩn?", hint:"Dùng để lau nhà", a:"Giẻ lau", options:["Khăn mặt","Giẻ lau","Chổi","Nước lau sàn"]},
+    {q:"Bệnh gì bác sĩ phải bó tay?", hint:"Chơi chữ", a:"Gãy tay", options:["Cảm cúm","Đau bụng","Gãy tay","Sốt xuất huyết"]},
+    {q:"Lịch nào dài nhất?", hint:"Không phải lịch treo tường", a:"Lịch sử", options:["Lịch âm","Lịch dương","Lịch sử","Lịch vạn niên"]},
+    {q:"Xã nào đông nhất?", hint:"Chơi chữ với từ 'xã'", a:"Xã hội", options:["Xã An Bình","Xã hội","Xã Trung Tâm","Xã Hòa Bình"]},
+    {q:"Con đường nào dài nhất?", hint:"Gắn với cuộc đời con người", a:"Đường đời", options:["Đường cao tốc","Đường đời","Đường quốc lộ","Đường mòn"]},
+    {q:"Cái gì có miệng mà không nói?", hint:"Đồ dùng chứa nước", a:"Cái chai", options:["Cái túi","Cái chai","Cái hộp","Cái miệng"]},
+    {q:"Con gì biết nói tiếng người?", hint:"Không phải con người", a:"Con vẹt", options:["Con khỉ","Con vẹt","Con chó","Con mèo"]}
   ],
   easy: [
-    {q:"⛰️ + 🌊 = ?", hint:"Hình núi + sông", a:"Núi sông", options:["Núi sông","Sông núi","Đồi núi","Biển cả"]},
-    {q:"🌳 + 🍎 = ?", hint:"Cây xanh ra quả", a:"Cây ăn quả", options:["Cây xanh","Cây ăn quả","Cây cổ thụ","Cây cảnh"]},
-    {q:"☀️ + 🌻 = ?", hint:"Hoa hướng về mặt trời", a:"Hoa hướng dương", options:["Hoa hồng","Hoa hướng dương","Hoa cúc","Hoa mai"]},
-    {q:"🏠 + 🚪 = ?", hint:"Ngôi nhà và cánh cửa", a:"Nhà cửa", options:["Nhà cửa","Cửa sổ","Mái nhà","Tường nhà"]},
-    {q:"🦷 + 🎸 = ?", hint:"Hình răng + cây đàn", a:"Đàn răng", options:["Răng khôn","Đàn răng","Nha chu","Đánh răng"]},
-    {q:"⚡ + 🥖 = ?", hint:"Hình tia sét + ổ bánh mì", a:"Bánh mì kẹp", options:["Bánh mì cháy","Bánh mì kẹp","Bánh mì nướng","Bánh mì nhanh"]},
-    {q:"⭐ + 🐟 = ?", hint:"Hình ngôi sao + con cá", a:"Cá sao", options:["Cá sao","Sao biển","Cá lấp lánh","Cá vàng"]},
-    {q:"🥛 + 🧋 = ?", hint:"Hình ly sữa + trân châu", a:"Trà sữa", options:["Sữa tươi","Trà sữa","Cà phê sữa","Chè trân châu"]}
+    {q:"Hình núi + chữ 'sông' gợi ý câu gì?", hint:"Đuổi hình bắt chữ", a:"Núi sông", options:["Núi sông","Sông núi","Đồi núi","Biển cả"]},
+    {q:"Hình cây + chữ 'ăn' = ?", hint:"Đuổi hình", a:"Cây ăn quả", options:["Cây xanh","Cây ăn quả","Cây cổ thụ","Cây cảnh"]},
+    {q:"Hình mặt trời + hoa = ?", hint:"Đuổi hình", a:"Hoa hướng dương", options:["Hoa hồng","Hoa hướng dương","Hoa cúc","Hoa mai"]},
+    {q:"Hình nhà + chữ 'cửa' = ?", hint:"Đuổi hình", a:"Nhà cửa", options:["Nhà cửa","Cửa sổ","Mái nhà","Tường nhà"]}
   ]
 };
 
 let currentQuestions = [], currentIndex = 0, score = 0;
-let musicPlaying = false;
-let timerInterval = null;
-let timeLeft = 100;
-let isAnswered = false;
-
-let bgMusic = null;
-let correctSound = null;
-
-function initAudio() {
-  if (!bgMusic) {
-    // Sử dụng file nhạc trực tuyến hợp lệ từ dự án mã nguồn mở
-    bgMusic = new Audio('https://soundhelix.com');
-    bgMusic.loop = true;
-    bgMusic.volume = 0.1;
-  }
-  if (!correctSound) {
-    // Sử dụng âm thanh thông báo ngắn hợp lệ
-    correctSound = new Audio('https://google.com');
-    correctSound.volume = 0.3;
-  }
-}
-
-function toggleMusic() {
-  initAudio();
-  if (musicPlaying) {
-    bgMusic.pause();
-    document.getElementById('musicBtn').textContent = '🎵 Bật nhạc nền';
-  } else {
-    bgMusic.play().catch(e => console.log("Trình duyệt chặn âm thanh tự động:", e));
-    document.getElementById('musicBtn').textContent = '🔇 Tắt nhạc nền';
-  }
-  musicPlaying = !musicPlaying;
-}
-
-function showToast() {
-  const toast = document.getElementById('toast');
-  toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 1500);
-}
 
 function startGame(mode) {
-  initAudio();
   currentQuestions = questions[mode] || [];
   currentIndex = 0;
   score = 0;
@@ -151,32 +93,10 @@ function startGame(mode) {
   loadQuestion();
 }
 
-function startTimer() {
-  clearInterval(timerInterval);
-  timeLeft = 100;
-  const bar = document.getElementById('timerBar');
-  bar.style.width = '100%';
-  
-  timerInterval = setInterval(() => {
-    if (isAnswered) {
-      clearInterval(timerInterval);
-      return;
-    }
-    timeLeft -= 1;
-    bar.style.width = timeLeft + '%';
-    
-    if (timeLeft <= 0) {
-      clearInterval(timerInterval);
-      handleTimeout();
-    }
-  }, 100);
-}
-
 function loadQuestion() {
-  isAnswered = false;
   const q = currentQuestions[currentIndex];
   document.getElementById('question').textContent = q.q;
-  document.getElementById('hint').textContent = q.hint ? '💡 Gợi ý: ' + q.hint : '';
+  document.getElementById('hint').textContent = q.hint ? 'Gợi ý: ' + q.hint : '';
   document.getElementById('score').textContent = score;
   document.getElementById('nextBtn').style.display = 'none';
 
@@ -189,52 +109,39 @@ function loadQuestion() {
     btn.onclick = () => selectChoice(btn, opt, q.a);
     box.appendChild(btn);
   });
-  
-  startTimer();
 }
 
 function selectChoice(btn, selected, answer) {
-  if (isAnswered) return;
-  isAnswered = true;
-  clearInterval(timerInterval);
-  
   document.querySelectorAll('.choice').forEach(b => b.onclick = null);
-  
   if (selected === answer) {
-    if (btn) btn.classList.add('correct');
+    btn.classList.add('correct');
     score++;
-    if (correctSound) {
-      correctSound.currentTimecorrectSound.play().catch(()=>{});
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('.choice').forEach(b => {
+      if (b.textContent === answer) b.classList.add('correct');
+    });
+  }
+  document.getElementById('score').textContent = score;
+  document.getElementById('nextBtn').style.display = 'block';
 }
-showToast();
-} else {
-if (btn) btn.classList.add('wrong');
-document.querySelectorAll('.choice').forEach(b => {
-if (b.textContent === answer) b.classList.add('correct');
-});
-}
-document.getElementById('score').textContent = score;
-document.getElementById('nextBtn').style.display = 'block';
-}
-function handleTimeout() {
-const q = currentQuestions[currentIndex];
-selectChoice(null, null, q.a);
-}
+
 function nextQuestion() {
-currentIndex++;
-if (currentIndex < currentQuestions.length) {
-loadQuestion();
-} else {
-clearInterval(timerInterval);
-document.getElementById('game').classList.remove('active');
-document.getElementById('result').classList.add('active');
-document.getElementById('finalScore').textContent = Bạn đúng ${score} / ${currentQuestions.length} câu! 🎉;
+  currentIndex++;
+  if (currentIndex < currentQuestions.length) {
+    loadQuestion();
+  } else {
+    document.getElementById('game').classList.remove('active');
+    document.getElementById('result').classList.add('active');
+    document.getElementById('finalScore').textContent = `Bạn đúng \( {score}/ \){currentQuestions.length} câu!`;
+  }
 }
-}
+
 function goHome() {
-clearInterval(timerInterval);
-isAnswered = false;
-document.getElementById('game').classList.remove('active');
-document.getElementById('result').classList.remove('active');
-document.getElementById('home').style.display = 'block';
+  document.getElementById('game').classList.remove('active');
+  document.getElementById('result').classList.remove('active');
+  document.getElementById('home').style.display = 'block';
 }
+</script>
+</body>
+</html>
