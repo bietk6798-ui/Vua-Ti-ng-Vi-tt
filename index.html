@@ -9,7 +9,7 @@
 body{font-family:system-ui,-apple-system,sans-serif;background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#fff;min-height:100vh;display:flex;justify-content:center;align-items:center;padding:16px}
 .container{background:rgba(15,23,42,.95);border:2px solid #3b82f6;border-radius:20px;padding:24px;max-width:480px;width:100%;box-shadow:0 20px 40px rgba(0,0,0,.4)}
 h1{text-align:center;font-size:1.9rem;margin-bottom:6px;color:#fbbf24}
-.subtitle{text-align:center;color:#93c5fd;margin-bottom:22px;font-size:.95rem}
+.subtitle{text-align:center;color:#93c5fd;margin-bottom:18px;font-size:.95rem}
 .modes{display:grid;gap:12px}
 .mode-btn{background:linear-gradient(135deg,#f59e0b,#d97706);border:none;color:#fff;padding:16px;border-radius:14px;font-size:1.1rem;font-weight:700;cursor:pointer}
 .mode-btn.rebus{background:linear-gradient(135deg,#06b6d4,#0891b2)}
@@ -29,13 +29,20 @@ h1{text-align:center;font-size:1.9rem;margin-bottom:6px;color:#fbbf24}
 .btn-secondary{background:#334155;color:#fff}
 .result{text-align:center}
 .result h2{color:#fbbf24;margin-bottom:10px}
+.music-btn{display:block;margin:0 auto 16px;padding:8px 16px;border-radius:20px;border:1px solid #3b82f6;background:#1e293b;color:#93c5fd;font-size:.9rem;cursor:pointer}
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#065f46;color:#fff;padding:12px 24px;border-radius:12px;font-weight:700;z-index:99;display:none;box-shadow:0 8px 20px rgba(0,0,0,.3)}
+.toast.show{display:block;animation:pop .3s ease}
+@keyframes pop{from{transform:translateX(-50%) scale(.7);opacity:0}to{transform:translateX(-50%) scale(1);opacity:1}}
 </style>
 </head>
 <body>
+<div class="toast" id="toast">🎉 Chính xác! +1 điểm</div>
+
 <div class="container">
   <div id="home">
     <h1>👑 VUA TIẾNG VIỆT</h1>
     <p class="subtitle">Chơi thông minh – Vững tiếng Việt</p>
+    <button class="music-btn" id="musicBtn" onclick="toggleMusic()">🎵 Bật nhạc nền</button>
     <div class="modes">
       <button class="mode-btn" onclick="startGame('hard')">🧠 Chế độ Khó</button>
       <button class="mode-btn rebus" onclick="startGame('easy')">🖼️ Đuổi hình bắt chữ</button>
@@ -63,24 +70,51 @@ h1{text-align:center;font-size:1.9rem;margin-bottom:6px;color:#fbbf24}
 <script>
 const questions = {
   hard: [
-    {q:"Con mèo nào đi bằng hai chân?", hint:"Nhân vật hoạt hình nổi tiếng", a:"Mèo Doraemon", options:["Mèo Tom","Mèo Doraemon","Mèo Garfield","Mèo Hello Kitty"]},
-    {q:"Cái gì càng lau càng bẩn?", hint:"Dùng để lau nhà", a:"Giẻ lau", options:["Khăn mặt","Giẻ lau","Chổi","Nước lau sàn"]},
-    {q:"Bệnh gì bác sĩ phải bó tay?", hint:"Chơi chữ", a:"Gãy tay", options:["Cảm cúm","Đau bụng","Gãy tay","Sốt xuất huyết"]},
-    {q:"Lịch nào dài nhất?", hint:"Không phải lịch treo tường", a:"Lịch sử", options:["Lịch âm","Lịch dương","Lịch sử","Lịch vạn niên"]},
-    {q:"Xã nào đông nhất?", hint:"Chơi chữ với từ 'xã'", a:"Xã hội", options:["Xã An Bình","Xã hội","Xã Trung Tâm","Xã Hòa Bình"]},
-    {q:"Con đường nào dài nhất?", hint:"Gắn với cuộc đời con người", a:"Đường đời", options:["Đường cao tốc","Đường đời","Đường quốc lộ","Đường mòn"]},
-    {q:"Cái gì có miệng mà không nói?", hint:"Đồ dùng chứa nước", a:"Cái chai", options:["Cái túi","Cái chai","Cái hộp","Cái miệng"]},
-    {q:"Con gì biết nói tiếng người?", hint:"Không phải con người", a:"Con vẹt", options:["Con khỉ","Con vẹt","Con chó","Con mèo"]}
+    {q:"🐱 Con mèo nào đi bằng hai chân?", hint:"Nhân vật hoạt hình nổi tiếng", a:"Mèo Doraemon", options:["Mèo Tom","Mèo Doraemon","Mèo Garfield","Mèo Hello Kitty"]},
+    {q:"🧹 Cái gì càng lau càng bẩn?", hint:"Dùng để lau nhà", a:"Giẻ lau", options:["Khăn mặt","Giẻ lau","Chổi","Nước lau sàn"]},
+    {q:"🤕 Bệnh gì bác sĩ phải bó tay?", hint:"Chơi chữ", a:"Gãy tay", options:["Cảm cúm","Đau bụng","Gãy tay","Sốt xuất huyết"]},
+    {q:"📜 Lịch nào dài nhất?", hint:"Không phải lịch treo tường", a:"Lịch sử", options:["Lịch âm","Lịch dương","Lịch sử","Lịch vạn niên"]},
+    {q:"👥 Xã nào đông nhất?", hint:"Chơi chữ với từ 'xã'", a:"Xã hội", options:["Xã An Bình","Xã hội","Xã Trung Tâm","Xã Hòa Bình"]},
+    {q:"🛤️ Con đường nào dài nhất?", hint:"Gắn với cuộc đời con người", a:"Đường đời", options:["Đường cao tốc","Đường đời","Đường quốc lộ","Đường mòn"]},
+    {q:"🍾 Cái gì có miệng mà không nói?", hint:"Đồ dùng chứa nước", a:"Cái chai", options:["Cái túi","Cái chai","Cái hộp","Cái miệng"]},
+    {q:"🦜 Con gì biết nói tiếng người?", hint:"Không phải con người", a:"Con vẹt", options:["Con khỉ","Con vẹt","Con chó","Con mèo"]}
   ],
   easy: [
-    {q:"Hình núi + chữ 'sông' gợi ý câu gì?", hint:"Đuổi hình bắt chữ", a:"Núi sông", options:["Núi sông","Sông núi","Đồi núi","Biển cả"]},
-    {q:"Hình cây + chữ 'ăn' = ?", hint:"Đuổi hình", a:"Cây ăn quả", options:["Cây xanh","Cây ăn quả","Cây cổ thụ","Cây cảnh"]},
-    {q:"Hình mặt trời + hoa = ?", hint:"Đuổi hình", a:"Hoa hướng dương", options:["Hoa hồng","Hoa hướng dương","Hoa cúc","Hoa mai"]},
-    {q:"Hình nhà + chữ 'cửa' = ?", hint:"Đuổi hình", a:"Nhà cửa", options:["Nhà cửa","Cửa sổ","Mái nhà","Tường nhà"]}
+    {q:"⛰️ + 🌊 Hình núi + chữ 'sông' gợi ý câu gì?", hint:"Đuổi hình bắt chữ", a:"Núi sông", options:["Núi sông","Sông núi","Đồi núi","Biển cả"]},
+    {q:"🌳 + 🍎 Hình cây + chữ 'ăn' = ?", hint:"Đuổi hình", a:"Cây ăn quả", options:["Cây xanh","Cây ăn quả","Cây cổ thụ","Cây cảnh"]},
+    {q:"☀️ + 🌻 Hình mặt trời + hoa = ?", hint:"Đuổi hình", a:"Hoa hướng dương", options:["Hoa hồng","Hoa hướng dương","Hoa cúc","Hoa mai"]},
+    {q:"🏠 + 🚪 Hình nhà + chữ 'cửa' = ?", hint:"Đuổi hình", a:"Nhà cửa", options:["Nhà cửa","Cửa sổ","Mái nhà","Tường nhà"]}
   ]
 };
 
 let currentQuestions = [], currentIndex = 0, score = 0;
+let musicPlaying = false;
+
+// Nhạc nền (free royalty-free)
+const bgMusic = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
+bgMusic.loop = true;
+bgMusic.volume = 0.35;
+
+// Âm thanh trả lời đúng
+const correctSound = new Audio('https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg');
+correctSound.volume = 0.6;
+
+function toggleMusic() {
+  if (musicPlaying) {
+    bgMusic.pause();
+    document.getElementById('musicBtn').textContent = '🎵 Bật nhạc nền';
+  } else {
+    bgMusic.play().catch(()=>{});
+    document.getElementById('musicBtn').textContent = '🔇 Tắt nhạc nền';
+  }
+  musicPlaying = !musicPlaying;
+}
+
+function showToast() {
+  const toast = document.getElementById('toast');
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 1500);
+}
 
 function startGame(mode) {
   currentQuestions = questions[mode] || [];
@@ -96,7 +130,7 @@ function startGame(mode) {
 function loadQuestion() {
   const q = currentQuestions[currentIndex];
   document.getElementById('question').textContent = q.q;
-  document.getElementById('hint').textContent = q.hint ? 'Gợi ý: ' + q.hint : '';
+  document.getElementById('hint').textContent = q.hint ? '💡 Gợi ý: ' + q.hint : '';
   document.getElementById('score').textContent = score;
   document.getElementById('nextBtn').style.display = 'none';
 
@@ -116,6 +150,9 @@ function selectChoice(btn, selected, answer) {
   if (selected === answer) {
     btn.classList.add('correct');
     score++;
+    correctSound.currentTime = 0;
+    correctSound.play().catch(()=>{});
+    showToast();
   } else {
     btn.classList.add('wrong');
     document.querySelectorAll('.choice').forEach(b => {
@@ -133,7 +170,7 @@ function nextQuestion() {
   } else {
     document.getElementById('game').classList.remove('active');
     document.getElementById('result').classList.add('active');
-    document.getElementById('finalScore').textContent = `Bạn đúng \( {score}/ \){currentQuestions.length} câu!`;
+    document.getElementById('finalScore').textContent = `Bạn đúng \( {score}/ \){currentQuestions.length} câu! 🎉`;
   }
 }
 
@@ -144,4 +181,4 @@ function goHome() {
 }
 </script>
 </body>
-      </html>
+</html>
