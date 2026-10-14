@@ -580,4 +580,227 @@ if(btn.querySelector('.text').innerText === correctAns) {
 btn.classList.add('correct');
 }
 })
+                   <!-- Khung chứa từ bị xáo trộn (Dành cho chế độ Sắp Xếp Từ) -->
+      <div class="clue hide" id="clueBox">
+        <!-- Các ô ký tự xáo trộn sẽ tự động được thêm vào đây bằng JS -->
+      </div>
+
+      <!-- Khu vực hiển thị đáp án cho Chế độ Trắc Nghiệm -->
+      <div class="choices" id="choicesBox">
+        <!-- Các nút lựa chọn A, B, C, D sẽ tự động được thêm vào đây bằng JS -->
+      </div>
+
+      <!-- Khu vực nhập đáp án cho Chế độ Sắp Xếp Từ -->
+      <div class="answerrow hide" id="inputBox">
+        <input type="text" id="userAnswer" placeholder="Nhập câu trả lời của bạn..." autocomplete="off">
+        <button class="btn primary" onclick="checkArrangeAnswer()">Gửi</button>
+      </div>
+    </div>
+
+    <!-- Phản hồi đúng/sai và Thanh điều hướng chân trang -->
+    <div class="feedback" id="feedbackMessage"></div>
+
+    <div class="gamefoot">
+      <button class="btn" onclick="backToHome()">🏠 Về trang chủ</button>
+      <button class="btn primary hide" id="nextBtn" onclick="nextQuestion()">Tiếp theo ➡️</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= CƠ CHẾ JAVASCRIPT ĐIỀU KHIỂN GAME ================= -->
+<script>
+// --- Kho dữ liệu câu hỏi phong phú ---
+const QUIZ_DATA = [
+  { q: "Từ nào sau đây viết đúng chính tả?", choices: ["Súc tích", "Xúc tích", "Súc tích ", "Xúc tích "], correct: 0, hint: "Từ chỉ sự gọn chẽ nhưng đầy đủ ý nghĩa." },
+  { q: "Điền vào chỗ trống: 'Xôi hỏng bỏng ...'", choices: ["Chanh", "Không", "Không ", "Bẻ"], correct: 1, hint: "Thành ngữ chỉ việc không đạt được kết quả gì." },
+  { q: "Từ nào chỉ một bộ phận trên khuôn mặt?", choices: ["Lông mày", "Lông mày ", "Nông mày", "Lông mài"], correct: 0, hint: "Dải lông mảnh nằm ở phía trên hốc mắt." }
+];
+
+const ARRANGE_DATA = [
+  { scrambled: ["U", "Y", "Ê", "N", "G", "N"], correct: "NGUYÊN", hint: "Từ chỉ sự trọn vẹn, chưa bị sứt mẻ." },
+  { scrambled: ["N", "H", "Ư", "G", "Ồ", "R"], correct: "GƯỜNG NHỘ", hint: "Ngược lại của ngượng ngùng, trạng thái xấu hổ nhẹ." }, // Ví dụ đảo chữ mẫu
+  { scrambled: ["T", "I", "Ế", "G", "N", "V", "I", "Ệ", "T"], correct: "TIẾNG VIỆT", hint: "Ngôn ngữ chúng ta đang nói hàng ngày." }
+];
+
+// --- Khởi tạo biến trạng thái ---
+let currentMode = '';
+let currentQuestionIndex = 0;
+let score = 0;
+let totalQuestions = 3;
+let canAnswer = true;
+
+// --- Âm thanh giả lập (Web Audio API) ---
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+let bgNode = null;
+let isAudioPlaying = false;
+
+function playTone(freq, type, duration) {
+  if (!isAudioPlaying) return;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = type;
+  osc.frequency.value = freq;
+  gain.gain.setValueAtTime((document.getElementById('volumeSlider').value / 100) * 0.3, audioCtx.currentTime);
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  osc.start();
+  osc.stop(audioCtx.currentTime + duration);
+}
+
+// Thiết lập bộ điều khiển âm thanh trên thanh công cụ
+document.getElementById('audioToggle').addEventListener('click', function() {
+  isAudioPlaying = !isAudioPlaying;
+  this.setAttribute('aria-pressed', isAudioPlaying);
+  if (isAudioPlaying && audioCtx.state === 'suspended') audioCtx.resume();
+});
+
+// --- Điều hướng màn hình game ---
+function startGame(mode) {
+  currentMode = mode;
+  currentQuestionIndex = 0;
+  score = 0;
+  canAnswer = true;
+  
+  document.getElementById('homeScreen').classList.add('hide');
+  document.getElementById('gameScreen').classList.add('active');
+  document.getElementById('scoreTracker').innerText = `Điểm: ${score}`;
+  document.getElementById('gameModeTitle').innerText = `Chế độ: ${mode === 'quiz' ? 'Trắc nghiệm' : 'Sắp xếp từ'}`;
+  
+  loadQuestion();
+}
+
+function backToHome() {
+  document.getElementById('gameScreen').classList.remove('active');
+  document.getElementById('homeScreen').classList.remove('hide');
+}
+
+// --- Tải nội dung câu hỏi dựa trên chế độ ---
+function loadQuestion() {
+  canAnswer = true;
+  document.getElementById('feedbackMessage').className = 'feedback';
+  document.getElementById('feedbackMessage').innerText = '';
+  document.getElementById('nextBtn').classList.add('hide');
+  document.getElementById('userAnswer').value = '';
+  
+  // Cập nhật thanh tiến trình (Progress Bar)
+  const progressPercent = (currentQuestionIndex / totalQuestions) * 100;
+  document.getElementById('progressBar').style.width = `${progressPercent}%`;
+
+  if (currentQuestionIndex >= totalQuestions) {
+    showEndScreen();
+    return;
+  }
+
+  if (currentMode === 'quiz') {
+    // Hiển thị giao diện trắc nghiệm
+    document.getElementById('clueBox').classList.add('hide');
+    document.getElementById('inputBox').classList.add('hide');
+    document.getElementById('choicesBox').classList.remove('hide');
+    
+    const data = QUIZ_DATA[currentQuestionIndex];
+    document.getElementById('questionPrompt').innerText = data.q;
+    document.getElementById('hintText').innerText = `Gợi ý: ${data.hint}`;
+    
+    const choicesBox = document.getElementById('choicesBox');
+    choicesBox.innerHTML = '';
+    const letters = ['A', 'B', 'C', 'D'];
+    
+    data.choices.forEach((choice, index) => {
+      const btn = document.createElement('button');
+      btn.className = 'choice';
+      btn.innerHTML = `<span class="letter">${letters[index]}</span> ${choice}`;
+      btn.onclick = () => checkQuizAnswer(index, btn);
+      choicesBox.appendChild(btn);
+    });
+  } else {
+    // Hiển thị giao diện Sắp xếp từ
+    document.getElementById('choicesBox').classList.add('hide');
+    document.getElementById('clueBox').classList.remove('hide');
+    document.getElementById('inputBox').classList.remove('hide');
+    
+    const data = ARRANGE_DATA[currentQuestionIndex];
+    document.getElementById('questionPrompt').innerText = "Hãy sắp xếp các chữ cái sau thành từ có nghĩa";
+    document.getElementById('hintText').innerText = `Gợi ý: ${data.hint}`;
+    
+    const clueBox = document.getElementById('clueBox');
+    clueBox.innerHTML = '';
+    data.scrambled.forEach(char => {
+      const tile = document.createElement('div');
+      tile.className = 'wordtile';
+      tile.innerText = char;
+      clueBox.appendChild(tile);
+    });
+  }
+}
+
+// --- Kiểm tra kết quả ---
+function checkQuizAnswer(selectedIndex, selectedBtn) {
+  if (!canAnswer) return;
+  canAnswer = false;
+  
+  const data = QUIZ_DATA[currentQuestionIndex];
+  const choices = document.getElementById('choicesBox').children;
+  
+  if (selectedIndex === data.correct) {
+    selectedBtn.classList.add('correct');
+    document.getElementById('feedbackMessage').className = 'feedback good';
+    document.getElementById('feedbackMessage').innerText = '🎉 CHÍNH XÁC!';
+    playTone(523.25, 'sine', 0.2); // Đốt Đô sáng vui tươi
+    score += 10;
+  } else {
+    selectedBtn.classList.add('wrong');
+    choices[data.correct].classList.add('correct');
+    document.getElementById('feedbackMessage').className = 'feedback bad';
+    document.getElementById('feedbackMessage').innerText = '❌ RẤT TIẾC, CHƯA ĐÚNG!';
+    playTone(196.00, 'sawtooth', 0.3); // Nốt Sol trầm lỗi
+  }
+  
+  document.getElementById('scoreTracker').innerText = `Điểm: ${score}`;
+  document.getElementById('nextBtn').classList.remove('hide');
+}
+
+function checkArrangeAnswer() {
+  if (!canAnswer) return;
+  const inputVal = document.getElementById('userAnswer').value.trim().toUpperCase();
+  if (!inputVal) return;
+  
+  canAnswer = false;
+  const data = ARRANGE_DATA[currentQuestionIndex];
+  
+  if (inputVal === data.correct) {
+    document.getElementById('feedbackMessage').className = 'feedback good';
+    document.getElementById('feedbackMessage').innerText = '🎉 BẠN THẬT XUẤT SẮC!';
+    playTone(523.25, 'sine', 0.2);
+    score += 10;
+  } else {
+    document.getElementById('feedbackMessage').className = 'feedback bad';
+    document.getElementById('feedbackMessage').innerText = `❌ SAI RỒI! Đáp án đúng là: ${data.correct}`;
+    playTone(196.00, 'sawtooth', 0.3);
+  }
+  
+  document.getElementById('scoreTracker').innerText = `Điểm: ${score}`;
+  document.getElementById('nextBtn').classList.remove('hide');
+}
+
+// --- Chuyển câu hỏi & Kết thúc ---
+function nextQuestion() {
+  currentQuestionIndex++;
+  loadQuestion();
+}
+
+function showEndScreen() {
+  document.getElementById('progressBar').style.width = `100%`;
+  document.getElementById('questionPrompt').innerText = '🏆 THỬ THÁCH HOÀN THÀNH!';
+  document.getElementById('hintText').innerText = `Bạn đã hoàn thành chặng đua ngôn ngữ này.`;
+  document.getElementById('choicesBox').classList.add('hide');
+  document.getElementById('clueBox').classList.add('hide');
+  document.getElementById('inputBox').classList.add('hide');
+  
+  document.getElementById('feedbackMessage').className = 'feedback good';
+  document.getElementById('feedbackMessage').innerHTML = `Trận đấu kết thúc! Tổng điểm của bạn: <span style="color:var(--gold); font-size:1.5rem">${score}</span>`;
+}
+</script>
+</body>
+</html>
+  
   
