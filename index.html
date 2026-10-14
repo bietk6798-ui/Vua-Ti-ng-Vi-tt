@@ -204,5 +204,39 @@ function selectChoice(btn, selected, answer) {
   if (selected === answer) {
     if (btn) btn.classList.add('correct');
     score++;
-    if (correctSound) {
-      
+    if (correctSound)correctSound.currentTime = 0;
+correctSound.play().catch(()=>{});
+}
+showToast();
+} else {
+if (btn) btn.classList.add('wrong');
+document.querySelectorAll('.choice').forEach(b => {
+if (b.textContent === answer) b.classList.add('correct');
+});
+}
+document.getElementById('score').textContent = score;
+document.getElementById('nextBtn').style.display = 'block';
+}
+function handleTimeout() {
+const q = currentQuestions[currentIndex];
+selectChoice(null, null, q.a);
+}
+function nextQuestion() {
+currentIndex++;
+if (currentIndex < currentQuestions.length) {
+loadQuestion();
+} else {
+clearInterval(timerInterval);
+document.getElementById('game').classList.remove('active');
+document.getElementById('result').classList.add('active');
+document.getElementById('finalScore').textContent = Bạn đúng ${score} / ${currentQuestions.length} câu! 🎉;
+}
+}
+function goHome() {
+clearInterval(timerInterval);
+isAnswered = false;
+document.getElementById('game').classList.remove('active');
+document.getElementById('result').classList.remove('active');
+document.getElementById('home').style.display = 'block';
+  }
+  
