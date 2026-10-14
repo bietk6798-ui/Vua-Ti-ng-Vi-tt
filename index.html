@@ -168,5 +168,416 @@ let isAudioOn = false;
 
 audioToggle.addEventListener('click', function() {
   isAudioOn = !isAudioOn;
-  this.setAttribute('aria-pressed', isAudioOn);
+  this.setAttribute('aria-pressed', isAudioOn);Chế độ AI
+Tất cả
+Hình ảnh
+Video
+Tin tức
+Mua sắm
+Sách
+Chuyến bay
+Tài chính
+Đoạn mã HTML bạn gửi bị cắt ngắn ở cuối dòng cuối cùng (margin-b). Có vẻ như đây là mã nguồn của một ứng dụng trò chơi Vua Tiếng Việt đang được viết dở hoặc đang được tái cấu trúc lại giao diện (Visual redesign) lấy cảm hứng từ một hình ảnh tham chiếu nào đó.
+Nếu bạn muốn tiếp tục hoàn thiện hoặc sửa lỗi cho đoạn mã này, vui lòng cung cấp thêm thông tin nhé!
+Để tôi có thể hỗ trợ tốt nhất, bạn muốn làm gì tiếp theo với đoạn mã này?
+Hoàn thiện tiếp phần CSS bị cắt ngắn (margin-bottom, các thành phần responsive, v.v.)?
+Bổ sung phần mã cấu trúc HTML hoàn chỉnh cho các thành phần như .top-brand, .audio-panel, và các chế độ chơi?
+Viết thêm đoạn mã JavaScript để xử lý logic chấm điểm, hiển thị câu hỏi, đếm thời gian hoặc hiệu ứng chúc mừng?
+Hãy phản hồi lại phần mã còn thiếu hoặc mục tiêu cụ thể của bạn nhé!
+
+
+
+
+Các phím chức năng (như nút bật/tắt âm thanh, chọn chế độ chơi hoặc các ô đáp án) trong đoạn mã của bạn không hoạt động vì hai lý do cốt lõi sau:
+Thiếu mã JavaScript (Logic xử lý): Mã bạn gửi hoàn toàn là cấu trúc hiển thị (HTML) và giao diện (CSS). Bản thân HTML/CSS chỉ tạo ra cái khung và màu sắc, nó giống như một chiếc xe có vỏ nhưng chưa có động cơ. Để các phím có thể bấm và phản hồi (ví dụ: chuyển trạng thái aria-pressed="true", đổi màu nút, nhảy sang câu hỏi tiếp theo), bạn bắt buộc phải viết thêm mã JavaScript để bắt sự kiện click (addEventListener).
+Mã HTML đang bị cắt dở: Đoạn mã hiển thị thanh menu phía trên (.top) đang bị dừng đột ngột ở thẻ .top-brand. Các thẻ đóng </div> và toàn bộ phần thân trò chơi (.game, .choices, .answerrow) chưa được đóng hoặc chưa xuất hiện đầy đủ trong đoạn mã bạn cung cấp.
+🛠️ Cách khắc phục để các nút hoạt động
+Để các phím chức năng như nút Toggle Âm thanh hoạt động được, bạn cần bổ sung một đoạn mã JavaScript ở phía dưới cùng (trước thẻ đóng </body>).
+Dưới đây là ví dụ minh họa cách viết JavaScript để kích hoạt nút bật/tắt âm thanh (.toggle) trong mã của bạn:
+html
+<!-- Bổ sung đoạn mã này vào cuối file HTML của bạn, trước thẻ </body> -->
+<script>
+  // 1. Tìm nút toggle âm thanh trong giao diện
+  const toggleBtn = document.querySelector('.toggle');
+
+  if (toggleBtn) {
+    // 2. Lắng nghe hành động click của người dùng
+    toggleBtn.addEventListener('click', function() {
+      // 3. Kiểm tra trạng thái hiện tại (đang bật hay đang tắt)
+      const isPressed = this.getAttribute('aria-pressed') === 'true';
+      
+      // 4. Đảo ngược trạng thái
+      this.setAttribute('aria-pressed', !isPressed);
+      
+      // 5. Xử lý logic bật/tắt âm thanh thực tế ở đây
+      if (!isPressed) {
+        console.log("Đã bật âm thanh");
+        // Kích hoạt audio của bạn tại đây
+      } else {
+        console.log("Đã tắt âm thanh");
+        // Tắt hoặc giảm volume audio tại đây
+      }
+    });
+  }
+
+  // Bạn có thể viết tương tự cho các nút chọn chế độ (.mode) hoặc đáp án (.choice)
+</script>
+Hãy thận trọng khi sử dụng mã.
+Để tôi có thể giúp bạn lập trình chính xác phần tính năng này, hãy chia sẻ thêm:
+Bạn đã có file JavaScript (.js) riêng cho trò chơi này chưa, hay cần tôi viết tích hợp trực tiếp vào file HTML này?
+Bạn muốn hoàn thiện chức năng cho nút bấm cụ thể nào nhất vào lúc này (Nút bật/tắt âm thanh, chọn Chế độ chơi, hay kiểm tra đáp án Đúng/Sai)?
+
+
+
+
+Dưới đây là full mã nguồn hoàn chỉnh (Single-file HTML) đã được sửa lại toàn bộ lỗi giao diện CSS bị cắt dở, đồng thời tích hợp sẵn mã JavaScript để toàn bộ phím chức năng hoạt động mượt mà. 
+
+GameVui
+Bạn chỉ cần sao chép toàn bộ đoạn mã này, lưu thành file có đuôi .html (ví dụ: game.html) và mở trực tiếp bằng trình duyệt là có thể chơi được ngay. 
+html
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="theme-color" content="#10152e">
+    <title>Vua Tiếng Việt — Thử thách</title>
+    <style>
+        /* CSS gốc và phần giao diện Redesign đã được sửa lỗi cắt đoạn */
+        :root {
+            --bg: #06194d;
+            --panel: #102b70;
+            --panel2: #123a8a;
+            --ink: #fffdf6;
+            --muted: #d5e7ff;
+            --gold: #ffd43b;
+            --mint: #50ffe1;
+            --pink: #ff85cf;
+            --blue: #5bcaff;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            color: var(--ink);
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+            overflow-x: hidden;
+            background: radial-gradient(ellipse at 50% 35%, #1767b5 0, #092c78 38%, #03103c 78%, #02082b 100%);
+            background-attachment: fixed;
+        }
+        body:before {
+            content: ""; position: fixed; inset: 0; pointer-events: none; z-index: -1;
+            background: linear-gradient(180deg, #04103b33 0%, transparent 40%, #02082b88 100%),
+                        radial-gradient(circle at 8% 55%, #3fc8ff33 0 2px, transparent 3px),
+                        radial-gradient(circle at 88% 43%, #fff6 0 2px, transparent 3px);
+        }
+        button, input { font: inherit; }
+        button { cursor: pointer; touch-action: manipulation; }
+        .wrap { width: min(1180px, 100%); margin: auto; padding: 16px 18px 30px; position: relative; }
+        
+        /* Top Navigation */
+        .top { 
+            display: flex; justify-content: space-between; align-items: center; 
+            gap: 15px; flex-wrap: wrap; margin-bottom: 25px; 
+        }
+        .top-brand { text-align: center; position: relative; }
+        .brand { font-weight: 1000; letter-spacing: .4px; font-size: clamp(1.5rem, 4vw, 2.2rem); text-shadow: 0 4px 8px rgba(0,0,0,0.3); }
+        .brand span { color: var(--gold); }
+        .top-actions { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+        
+        /* Audio Panel */
+        .audio-panel {
+            background: linear-gradient(135deg, #172f87f2, #111b5df2);
+            border: 2px solid #584bff; border-radius: 17px; padding: 8px 14px;
+            box-shadow: 0 0 18px #292cff55; display: flex; align-items: center; gap: 10px;
+        }
+        .audio-title { display: flex; align-items: center; gap: 9px; font-size: 0.9rem; white-space: nowrap; }
+        .round-icon { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: #3156d5; font-size: 0.9rem; }
+        
+        /* Toggle Switch */
+        .toggle { width: 50px; height: 26px; border: 0; border-radius: 99px; background: #33466d; padding: 3px; position: relative; transition: background 0.2s; }
+        .toggle span { display: block; width: 20px; height: 20px; background: white; border-radius: 50%; transition: transform .2s; }
+        .toggle[aria-pressed="true"] { background: #00ce86; }
+        .toggle[aria-pressed="true"] span { transform: translateX(24px); }
+        .sliderline { display: flex; align-items: center; gap: 8px; font-size: .82rem; color: #e6f3ff; }
+        .sliderline input { width: 70px; accent-color: var(--gold); }
+
+        /* Hero / Welcome Screen */
+        .hero { text-align: center; padding: 30px 8px 20px; }
+        .eyebrow { color: var(--mint); font-size: .85rem; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; }
+        .hero h1 { font-size: clamp(2rem, 6vw, 3.5rem); margin: 10px 0; color: var(--ink); }
+        .hero p { color: var(--muted); max-width: 620px; margin: 12px auto; }
+        
+        /* Game Modes */
+        .modes { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin: 25px 0; }
+        .mode {
+            background: linear-gradient(145deg, #172f87, #101c4e); border: 2px solid #3c4d84;
+            border-radius: 22px; padding: 24px 20px; text-align: left; color: var(--ink);
+            transition: transform .15s, border-color .15s;
+        }
+        .mode:hover { transform: translateY(-3px); border-color: var(--gold); }
+        .mode .emoji { font-size: 2.3rem; }
+        .mode h2 { margin: 12px 0 7px; font-size: 1.3rem; color: var(--gold); }
+        .mode p { margin: 0; color: var(--muted); font-size: 0.95rem; line-height: 1.4; }
+        
+        /* Game Interface */
+        .game {
+            display: none; background: rgba(16, 35, 92, 0.95); border: 2px solid #3c4d84;
+            border-radius: 24px; padding: clamp(15px, 4vw, 28px); box-shadow: 0 20px 55px rgba(0,0,0,0.5);
+        }
+        .game.active { display: block; }
+        .gamebar { display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: .95rem; }
+        .progress { height: 10px; background: #0a1336; border-radius: 999px; overflow: hidden; margin: 14px 0 20px; }
+        .progress span { display: block; height: 100%; width: 0%; background: linear-gradient(90deg, var(--mint), var(--gold)); transition: width .3s; }
+        
+        /* Question & Clues */
+        .question h2 { font-size: clamp(1.4rem, 4vw, 2rem); text-align: center; margin: 10px 0; }
+        .hint { text-align: center; color: var(--muted); margin-bottom: 15px; }
+        .clue {
+            min-height: 140px; display: flex; align-items: center; justify-content: center; gap: 12px;
+            flex-wrap: wrap; margin: 15px auto 25px; padding: 20px; border-radius: 20px;
+            background: linear-gradient(135deg, #0d1a44, #1b2a63); border: 1px solid #3c4d84; max-width: 680px;
+        }
+        .clue .wordtile { font-size: clamp(1.3rem, 4vw, 2.2rem); font-weight: 1000; letter-spacing: 2px; padding: 10px 18px; background: #253b80; border-radius: 12px; border-bottom: 4px solid #091026; text-transform: uppercase; }
+        
+        /* Form Inputs & Buttons */
+        .answerrow { display: flex; gap: 12px; max-width: 600px; margin: 0 auto; }
+        .answerrow input { min-width: 0; flex: 1; background: #071030; border: 2px solid #3c4d84; border-radius: 13px; color: white; padding: 14px; font-size: 1.1rem; outline: none; text-align: center; }
+        .answerrow input:focus { border-color: var(--mint); }
+        .btn { border: 1px solid #3c4d84; background: #172f87; color: var(--ink); padding: 12px 20px; border-radius: 13px; font-weight: 750; transition: all 0.2s; }
+        .btn.primary { background: linear-gradient(120deg, #f8bd4d, #ffdc7d); color: #06194d; border: 0; }
+        .btn:active { transform: scale(0.98); }
+        .btn:disabled { opacity: .45; cursor: not-allowed; }
+        
+        /* Choices Mode (Trắc nghiệm) */
+        .choices { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; max-width: 680px; margin: 20px auto 0; }
+        .choice { display: flex; align-items: center; gap: 12px; text-align: left; min-height: 58px; padding: 12px; border-radius: 14px; border: 2px solid #3c4d84; background: #0d1a44; color: var(--ink); font-weight: 800; width: 100%; }
+        .choice:hover { border-color: var(--gold); }
+        .choice .letter { display: grid; place-items: center; flex: 0 0 34px; height: 34px; border-radius: 10px; background: #253b80; color: var(--gold); }
+        .choice.correct { border-color: var(--mint); background: #103f3b; }
+        .choice.wrong { border-color: var(--pink); background: #4a1931; }
+
+        .feedback { min-height: 35px; margin: 15px 0; text-align: center; font-weight: 800; font-size: 1.1rem; }
+        .feedback.good { color: var(--mint); }
+        .feedback.bad { color: var(--pink); }
+        
+        /* End Screen */
+        .end { text-align: center; padding: 30px 10px; display: none; }
+        .end.active { display: block; }
+        .end .big { font-size: 4rem; margin: 0; }
+        
+        .hide { display: none !important; }
+        
+        @media(max-width:600px){
+            .modes, .choices { grid-template-columns: 1fr; }
+            .top { flex-direction: column; text-align: center; }
+            .answerrow { flex-direction: column; }
+            .answerrow .btn { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrap">
+    <!-- Top Bar -->
+    <div class="top">
+        <div class="top-brand">
+            <div class="brand">👑 VUA <span>TIẾNG VIỆT</span></div>
+        </div>
+        
+        <div class="top-actions">
+            <div class="audio-panel">
+                <div class="audio-title">
+                    <span class="round-icon">🔊</span>
+                    <span>Âm thanh</span>
+                </div>
+                <!-- Fix lỗi phím chức năng Toggle hoạt động trên click -->
+                <button class="toggle" id="audioToggle" aria-pressed="false" aria-label="Bật tắt âm thanh">
+                    <span></span>
+                </button>
+                <div class="sliderline">
+                    <input type="range" id="volumeSlider" min="0" max="100" value="50">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Màn hình chính / Lựa chọn chế độ -->
+    <div id="welcomeScreen" class="hero">
+        <div class="eyebrow">Trò chơi trí tuệ</div>
+        <h1>Thử Thách Phản Xạ Chữ Cái</h1>
+        <p>Kiểm tra khả năng nhạy bén ngôn từ của bạn thông qua các chữ cái xáo trộn độc đáo theo phong cách Vua Tiếng Việt.</p>
+        
+        <div class="modes">
+            <!-- Fix lỗi click vào Mode để bắt đầu chơi -->
+            <button class="mode" onclick="startGame('input')">
+                <div class="emoji">⌨️</div>
+                <h2>Chế độ Tự Nhập</h2>
+                <p>Nhìn các chữ cái bị đảo lộn cấu trúc và tự gõ câu trả lời chính xác nhất.</p>
+            </button>
+            <button class="mode" onclick="startGame('choice')">
+                <div class="emoji">🎯</div>
+                <h2>Chế độ Trắc Nghiệm</h2>
+Hãy thận trọng khi sử dụng mã.
+Nhanh mắt chọn 1 trong 4 phương án ghép chữ có nghĩa được chuẩn bị sẵn.
+
+
+Câu hỏi: 1/5
+Điểm số: 0
+
+
+
+Hãy sắp xếp các chữ cái sau thành từ đúng:
+Gợi ý: Từ ngữ thân thuộc
+Trả Lời
+Thoát
+Tiếp tục ➔
+
+🎉
+Chúc mừng bạn đã hoàn thành!
+Bạn đạt được 0 / 5 điểm.
+Chơi lại từ đầu
+
+// Dữ liệu câu hỏi mẫu
+const questionsDatabase = [
+{ scrambled: ["T", "I", "Ế", "N", "G", "V", "I", "Ệ", "T"], correct: "TIẾNG VIỆT", hint: "Ngôn ngữ chúng ta đang nói", choices: ["TIẾNG VIỆT", "TIỀNG VIẾT", "VIẾT TIẾNG", "TIẾNG VIỆC"] },
+{ scrambled: ["H", "Ư", "Ơ", "N", "G", "Đ", "Ư", "Ờ", "N", "G"], correct: "ĐƯỜNG HƯƠNG", hint: "Lối đi ngập tràn hương hoa", choices: ["ĐƯỜNG HƯƠNG", "HƯƠNG ĐƯỜNG", "ĐƯỜNG HƯỚNG", "HƯỚNG ĐƯỜNG"] },
+{ scrambled: ["O", "N", "G", "C", "Â", "U", "H"], correct: "CÂU HÒA", hint: "Trạng thái giảng hòa, kết thúc xung đột", choices: ["CÂU HÒA", "CẦU HÒA", "HÒA CÂU", "HÒA CẦU"] },
+{ scrambled: ["N", "G", "H", "Ĩ", "A", "T", "Ừ"], correct: "TỪ NGHĨA", hint: "Ý nghĩa của một từ ngữ", choices: ["TỪ NGHĨA", "NGHĨA TỪ", "TỰ NGHĨA", "TỪ NGHIÃ"] },
+{ scrambled: ["C", "H", "I", "Ế", "N", "Ắ", "T", "N", "G"], correct: "CHIẾN THẮNG", hint: "Đạt vị trí cao nhất trong cuộc đua", choices: ["CHIẾN THẮNG", "THẮNG CHIẾN", "CHIÊN THẮNG", "CHIẾN THĂNG"] }
+]; 
+
+Baamboozle
+ +1
+let currentMode = 'input';
+let currentQuestionIndex = 0;
+let score = 0;
+let isAnswered = false;
+// --- LOGIC PHÍM CHỨC NĂNG ÂM THANH (TOGGLE) ---
+const audioToggle = document.getElementById('audioToggle');
+const volumeSlider = document.getElementById('volumeSlider');
+audioToggle.addEventListener('click', function() {
+const isPressed = this.getAttribute('aria-pressed') === 'true';
+this.setAttribute('aria-pressed', !isPressed);
+if (!isPressed) {
+console.log("Âm thanh: BẬT. Âm lượng: " + volumeSlider.value + "%");
+} else {
+console.log("Âm thanh: TẮT");
+}
+});
+volumeSlider.addEventListener('input', function() {
+if(audioToggle.getAttribute('aria-pressed') === 'true') {
+console.log("Thay đổi âm lượng: " + this.value + "%");
+}
+});
+// --- QUẢN LÝ TRẠNG THÁI MÀN HÌNH GAME ---
+function startGame(mode) {
+currentMode = mode;
+currentQuestionIndex = 0;
+score = 0;
+isAnswered = false;
+document.getElementById('welcomeScreen').classList.add('hide');
+document.getElementById('endScreen').classList.remove('active');
+document.getElementById('gameScreen').classList.add('active');
+if (mode === 'choice') {
+document.getElementById('inputArea').classList.add('hide');
+document.getElementById('choicesArea').classList.remove('hide');
+} else {
+document.getElementById('inputArea').classList.remove('hide');
+document.getElementById('choicesArea').classList.add('hide');
+}
+loadQuestion();
+}
+// --- HIỂN THỊ CÂU HỎI ---
+function loadQuestion() {
+isAnswered = false;
+document.getElementById('nextBtn').classList.add('hide');
+document.getElementById('feedbackMessage').className = 'feedback';
+document.getElementById('feedbackMessage').innerText = '';
+document.getElementById('userInput').value = '';
+document.getElementById('userInput').disabled = false;
+document.getElementById('submitBtn').disabled = false;
+let qData = questionsDatabase[currentQuestionIndex];
+// Cập nhật thanh tiến trình & thông tin
+document.getElementById('questionNumber').innerText = Câu hỏi: ${currentQuestionIndex + 1}/${questionsDatabase.length};
+document.getElementById('scoreBoard').innerText = Điểm số: ${score};
+document.getElementById('wordHint').innerText = Gợi ý: ${qData.hint};
+document.getElementById('progressBar').style.width = ${((currentQuestionIndex) / questionsDatabase.length) * 100}%;
+// Render các ô chữ cái xáo trộn
+const container = document.getElementById('lettersContainer');
+container.innerHTML = '';
+qData.scrambled.forEach(letter => {
+let tile = document.createElement('span');
+tile.className = 'wordtile';
+tile.innerText = letter;
+container.appendChild(tile);
+});
+// Nếu là chế độ Trắc Nghiệm -> Tạo phím lựa chọn
+if (currentMode === 'choice') {
+const choicesArea = document.getElementById('choicesArea');
+choicesArea.innerHTML = '';
+const labels = ['A', 'B', 'C', 'D'];
+qData.choices.forEach((choiceText, index) => {
+let btn = document.createElement('button');
+btn.className = 'choice';
+btn.innerHTML = <span class="letter">${labels[index]}</span> <span class="text">${choiceText}</span>;
+btn.onclick = () => checkChoiceAnswer(btn, choiceText);
+choicesArea.appendChild(btn);
+});
+}
+}
+// --- KIỂM TRA ĐÁP ÁN CHẾ ĐỘ TỰ NHẬP ---
+document.getElementById('submitBtn').addEventListener('click', function() {
+if(isAnswered) return;
+let inputVal = document.getElementById('userInput').value.trim().toUpperCase();
+let correctAns = questionsDatabase[currentQuestionIndex].correct;
+if(!inputVal) {
+alert("Vui lòng gõ câu trả lời trước!");
+return;
+}
+isAnswered = true;
+document.getElementById('userInput').disabled = true;
+document.getElementById('submitBtn').disabled = true;
+let feedback = document.getElementById('feedbackMessage');
+if(inputVal === correctAns) {
+feedback.innerText = "CHÍNH XÁC! Bạn siêu quá 🌟";
+feedback.classList.add('good');
+score++;
+} else {
+feedback.innerText = SAI RỒI! Đáp án đúng là: ${correctAns};
+feedback.classList.add('bad');
+}
+document.getElementById('scoreBoard').innerText = Điểm số: ${score};
+document.getElementById('nextBtn').classList.remove('hide');
+});
+// Cho phép ấn Enter ở ô Input để gửi đáp án nhanh
+document.getElementById('userInput').addEventListener('keypress', function(e) {
+if (e.key === 'Enter') {
+document.getElementById('submitBtn').click();
+}
+});
+// --- KIỂM TRA ĐÁP ÁN CHẾ ĐỘ TRẮC NGHIỆM ---
+function checkChoiceAnswer(selectedBtn, chosenText) {
+if(isAnswered) return;
+isAnswered = true;
+let correctAns = questionsDatabase[currentQuestionIndex].correct;
+let allButtons = document.querySelectorAll('.choice');
+// Vô hiệu hóa tất cả các nút trắc nghiệm sau khi chọn
+allButtons.forEach(btn => btn.disabled = true);
+let feedback = document.getElementById('feedbackMessage');
+if(chosenText === correctAns) {
+selectedBtn.classList.add('correct');
+feedback.innerText = "ĐÚNG RỒI! +1 Điểm";
+feedback.classList.add('good');
+score++;
+} else {
+selectedBtn.classList.add('wrong');
+feedback.innerText = SAI RỒI! Đáp án đúng là: ${correctAns};
+feedback.classList.add('bad');
+// Tìm nút có đáp án đúng để làm nổi bật lên
+allButtons.forEach(btn => {
+if(btn.querySelector('.text').innerText === correctAns) {
+btn.classList.add('correct');
+}
+})
   
