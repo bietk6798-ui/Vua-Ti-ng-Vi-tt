@@ -1,163 +1,77 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vua Tiếng Việt</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: system-ui, -apple-system, sans-serif; background: linear-gradient(135deg, #0f172a, #1e3a8a); color: white; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 16px; }
-        .container { background: rgba(15, 23, 42, 0.9); border: 2px solid #3b82f6; border-radius: 20px; padding: 24px; max-width: 500px; width: 100%; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
-        h1 { text-align: center; font-size: 2rem; margin-bottom: 8px; color: #fbbf24; }
-        .subtitle { text-align: center; color: #93c5fd; margin-bottom: 24px; font-size: 0.95rem; }
-        .modes { display: grid; gap: 14px; }
-        .mode-btn { background: linear-gradient(135deg, #f59e0b, #d97706); border: none; color: white; padding: 18px; border-radius: 14px; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: transform 0.15s; }
-        .mode-btn:active { transform: scale(0.97); }
-        .mode-btn.rebus { background: linear-gradient(135deg, #06b6d4, #0891b2); }
-        .game { display: none; }
-        .game.active { display: block; }
-        .question { font-size: 1.3rem; font-weight: 700; margin-bottom: 12px; text-align: center; }
-        .hint { text-align: center; color: #94a3b8; margin-bottom: 20px; font-size: 0.95rem; }
-        .choices { display: grid; gap: 10px; }
-        .choice { background: #1e293b; border: 2px solid #334155; color: white; padding: 14px; border-radius: 12px; font-size: 1rem; text-align: left; cursor: pointer; }
-        .choice:hover { border-color: #3b82f6; }
-        .choice.correct { background: #065f46; border-color: #10b981; }
-        .choice.wrong { background: #7f1d1d; border-color: #ef4444; }
-        .score { text-align: center; margin: 16px 0; font-size: 1.1rem; }
-        .controls { display: flex; gap: 10px; margin-top: 16px; }
-        .btn { flex: 1; padding: 12px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; }
-        .btn-primary { background: #3b82f6; color: white; }
-        .btn-secondary { background: #334155; color: white; }
-        .result { text-align: center; display: none; }
-        .result.active { display: block; }
-        .result h2 { color: #fbbf24; margin-bottom: 12px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vua Tiếng Việt</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#fff;min-height:100vh;display:flex;justify-content:center;align-items:center;padding:16px}
+.container{background:rgba(15,23,42,.95);border:2px solid #3b82f6;border-radius:20px;padding:24px;max-width:480px;width:100%;box-shadow:0 20px 40px rgba(0,0,0,.4)}
+h1{text-align:center;font-size:1.9rem;margin-bottom:6px;color:#fbbf24}
+.subtitle{text-align:center;color:#93c5fd;margin-bottom:22px;font-size:.95rem}
+.modes{display:grid;gap:12px}
+.mode-btn{background:linear-gradient(135deg,#f59e0b,#d97706);border:none;color:#fff;padding:16px;border-radius:14px;font-size:1.1rem;font-weight:700;cursor:pointer}
+.mode-btn.rebus{background:linear-gradient(135deg,#06b6d4,#0891b2)}
+.mode-btn:active{transform:scale(.97)}
+.game,.result{display:none}
+.game.active,.result.active{display:block}
+.question{font-size:1.25rem;font-weight:700;margin-bottom:10px;text-align:center;line-height:1.4}
+.hint{text-align:center;color:#94a3b8;margin-bottom:18px;font-size:.9rem}
+.choices{display:grid;gap:10px}
+.choice{background:#1e293b;border:2px solid #334155;color:#fff;padding:13px;border-radius:12px;font-size:1rem;text-align:left;cursor:pointer}
+.choice.correct{background:#065f46;border-color:#10b981}
+.choice.wrong{background:#7f1d1d;border-color:#ef4444}
+.score{text-align:center;margin:16px 0;font-size:1.05rem}
+.controls{display:flex;gap:10px;margin-top:14px}
+.btn{flex:1;padding:12px;border:none;border-radius:10px;font-weight:600;cursor:pointer}
+.btn-primary{background:#3b82f6;color:#fff}
+.btn-secondary{background:#334155;color:#fff}
+.result{text-align:center}
+.result h2{color:#fbbf24;margin-bottom:10px}
+</style>
 </head>
 <body>
-    <div class="container">
-        <!-- Màn hình chọn chế độ -->
-        <div id="home">
-            <h1>👑 VUA TIẾNG VIỆT</h1>
-            <p class="subtitle">Chơi thông minh – Vững tiếng Việt</p>
-            <div class="modes">
-                <button class="mode-btn" onclick="startGame('hard')">🧠 Chế độ Khó</button>
-                <button class="mode-btn rebus" onclick="startGame('easy')">🖼️ Đuổi hình bắt chữ</button>
-            </div>
-        </div>
-
-        <!-- Màn hình chơi -->
-        <div class="game" id="game">
-            <div class="question" id="question"></div>
-            <div class="hint" id="hint"></div>
-            <div class="choices" id="choices"></div>
-            <div class="score">Điểm: <span id="score">0</span> / <span id="total">0</span></div>
-            <div class="controls">
-                <button class="btn btn-secondary" onclick="goHome()">← Về trang chủ</button>
-                <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" style="display:none">Câu tiếp →</button>
-            </div>
-        </div>
-
-        <!-- Kết quả -->
-        <div class="result" id="result">
-            <h2>🏆 Hoàn thành!</h2>
-            <p id="finalScore"></p>
-            <br>
-            <button class="btn btn-primary" onclick="goHome()">Chơi lại</button>
-        </div>
+<div class="container">
+  <div id="home">
+    <h1>👑 VUA TIẾNG VIỆT</h1>
+    <p class="subtitle">Chơi thông minh – Vững tiếng Việt</p>
+    <div class="modes">
+      <button class="mode-btn" onclick="startGame('hard')">🧠 Chế độ Khó</button>
+      <button class="mode-btn rebus" onclick="startGame('easy')">🖼️ Đuổi hình bắt chữ</button>
     </div>
+  </div>
 
-    <script>
-        const questions = {
-            hard: [
-                {
-                    q: "Con mèo nào đi bằng hai chân?",
-                    hint: "Nhân vật hoạt hình nổi tiếng",
-                    a: "Mèo Doraemon",
-                    options: ["Mèo Tom", "Mèo Doraemon", "Mèo Garfield", "Mèo Sylvester"]
-                }
-            ],
-            easy: [
-                {
-                    q: "Bức tranh tượng trưng cho câu tục ngữ nào?",
-                    hint: "Hình vẽ minh họa",
-                    a: "Ăn quả nhớ kẻ trồng cây",
-                    options: ["Ăn quả nhớ kẻ trồng cây", "Uống nước nhớ nguồn", "Có công mài sắt có ngày nên kim", "Gần mực thì đen gần đèn thì rạng"]
-                }
-            ]
-        };
+  <div class="game" id="game">
+    <div class="question" id="question"></div>
+    <div class="hint" id="hint"></div>
+    <div class="choices" id="choices"></div>
+    <div class="score">Điểm: <span id="score">0</span> / <span id="total">0</span></div>
+    <div class="controls">
+      <button class="btn btn-secondary" onclick="goHome()">← Về trang chủ</button>
+      <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" style="display:none">Câu tiếp →</button>
+    </div>
+  </div>
 
-        let currentMode = '';
-        let currentIndex = 0;
-        let score = 0;
-        let currentQuestions = [];
+  <div class="result" id="result">
+    <h2>🏆 Hoàn thành!</h2>
+    <p id="finalScore"></p><br>
+    <button class="btn btn-primary" onclick="goHome()">Chơi lại</button>
+  </div>
+</div>
 
-        function startGame(mode) {
-            currentMode = mode;
-            currentQuestions = questions[mode] || [];
-            currentIndex = 0;
-            score = 0;
-
-            document.getElementById('home').style.display = 'none';
-            document.getElementById('result').classList.remove('active');
-            document.getElementById('game').classList.add('active');
-            document.getElementById('total').textContent = currentQuestions.length;
-
-            loadQuestion();
-        }
-
-        function loadQuestion() {
-            const qData = currentQuestions[currentIndex];
-            document.getElementById('question').textContent = qData.q;
-            document.getElementById('hint').textContent = qData.hint ? `Gợi ý: ${qData.hint}` : '';
-            document.getElementById('score').textContent = score;
-            document.getElementById('nextBtn').style.display = 'none';
-
-            const choicesEl = document.getElementById('choices');
-            choicesEl.innerHTML = '';
-
-            qData.options.forEach(option => {
-                const btn = document.createElement('button');
-                btn.className = 'choice';
-                btn.textContent = option;
-                btn.onclick = () => selectChoice(btn, option, qData.a);
-                choicesEl.appendChild(btn);
-            });
-        }
-
-        function selectChoice(btn, selected, answer) {
-            const allBtns = document.querySelectorAll('.choice');
-            allBtns.forEach(b => b.onclick = null);
-
-            if (selected === answer) {
-                btn.classList.add('correct');
-                score++;
-            } else {
-                btn.classList.add('wrong');
-                allBtns.forEach(b => {
-                    if (b.textContent === answer) b.classList.add('correct');
-                });
-            }
-
-            document.getElementById('score').textContent = score;
-            document.getElementById('nextBtn').style.display = 'block';
-        }
-
-        function nextQuestion() {
-            currentIndex++;
-            if (currentIndex < currentQuestions.length) {
-                loadQuestion();
-            } else {
-                document.getElementById('game').classList.remove('active');
-                document.getElementById('result').classList.add('active');
-                document.getElementById('finalScore').textContent = `Bạn đạt được ${score} / ${currentQuestions.length} điểm!`;
-            }
-        }
-
-        function goHome() {
-            document.getElementById('game').classList.remove('active');
-            document.getElementById('result').classList.remove('active');
-            document.getElementById('home').style.display = 'block';
-        }
-    </script>
-</body>
-</html>
+<script>
+const questions = {
+  hard: [
+    {q:"Con mèo nào đi bằng hai chân?", hint:"Nhân vật hoạt hình nổi tiếng", a:"Mèo Doraemon", options:["Mèo Tom","Mèo Doraemon","Mèo Garfield","Mèo Hello Kitty"]},
+    {q:"Cái gì càng lau càng bẩn?", hint:"Dùng để lau nhà", a:"Giẻ lau", options:["Khăn mặt","Giẻ lau","Chổi","Nước lau sàn"]},
+    {q:"Bệnh gì bác sĩ phải bó tay?", hint:"Chơi chữ", a:"Gãy tay", options:["Cảm cúm","Đau bụng","Gãy tay","Sốt xuất huyết"]},
+    {q:"Lịch nào dài nhất?", hint:"Không phải lịch treo tường", a:"Lịch sử", options:["Lịch âm","Lịch dương","Lịch sử","Lịch vạn niên"]},
+    {q:"Xã nào đông nhất?", hint:"Chơi chữ với từ 'xã'", a:"Xã hội", options:["Xã An Bình","Xã hội","Xã Trung Tâm","Xã Hòa Bình"]},
+    {q:"Con đường nào dài nhất?", hint:"Gắn với cuộc đời con người", a:"Đường đời", options:["Đường cao tốc","Đường đời","Đường quốc lộ","Đường mòn"]},
+    {q:"Cái gì có miệng mà không nói?", hint:"Đồ dùng chứa nước", a:"Cái chai", options:["Cái túi","Cái chai","Cái hộp","Cái miệng"]},
+    {q:"Con gì biết nói tiếng người?", hint:"Không phải con người", a:"Con vẹt", options:["Con khỉ","Con vẹt","Con chó","Con mèo"]}
+  ],
+  easy: [
+    {q:"Hình núi + chữ 'sông' gợi ý câu gì?", hint:"Đuổi hình bắt chữ", a:"Núi sông", options:["Núi sông","Sông núi","Đồi núi","Biển cả"]},
+    {q:"Hình cây + chữ 'ăn' = ?", hint:"Đuổi hình", a:"Cây ăn quả", options:["Cây xanh","Cây ăn quả","C
