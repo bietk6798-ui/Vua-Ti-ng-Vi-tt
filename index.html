@@ -84,9 +84,10 @@ button{
 .choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;max-width:680px;margin:0 auto}
 .choice{
   display:flex;align-items:center;gap:12px;text-align:left;
-  min-height:56px;padding:14px 12px;border-radius:14px;
+  min-height:60px;padding:16px 14px;border-radius:14px;
   border:1px solid #52629b;background:#06194d;color:var(--ink);
   font-weight:800;width:100%;position:relative;z-index:2;
+  font-size:1.05rem;
 }
 .choice .letter{display:grid;place-items:center;flex:0 0 34px;height:34px;border-radius:10px;background:#123a8a;color:var(--gold)}
 .choice:active{transform:scale(0.97);background:#0a1f5c}
@@ -117,7 +118,7 @@ button{
   .btn{width:100%;text-align:center}
   .gamefoot{flex-direction:column}
   .gamefoot .btn{width:100%}
-  .choice{min-height:60px;padding:16px 14px;font-size:1.05rem}
+  .choice{min-height:64px;padding:18px 16px;font-size:1.08rem}
 }
 </style>
 </head>
@@ -251,14 +252,23 @@ const audioToggle = document.getElementById('audioToggle');
 const volumeSlider = document.getElementById('volumeSlider');
 bgMusic.volume = 0.4;
 
+// Hàm xử lý chạm + click an toàn cho điện thoại
 function onTap(el, handler) {
   if (!el) return;
-  // Dùng cả click và touchend để tương thích tối đa
-  el.addEventListener('click', handler, {passive: false});
+  let touched = false;
+
   el.addEventListener('touchend', function(e) {
-    e.preventDefault(); // ngăn double-fire
+    e.preventDefault();
+    if (touched) return;
+    touched = true;
     handler(e);
+    setTimeout(() => { touched = false; }, 300);
   }, {passive: false});
+
+  el.addEventListener('click', function(e) {
+    if (touched) return;
+    handler(e);
+  });
 }
 
 onTap(document.getElementById('btnQuiz'), function() { startGame('quiz'); });
@@ -274,7 +284,7 @@ onTap(audioToggle, async function() {
       await bgMusic.play();
       audioToggle.setAttribute('aria-pressed', 'true');
     } catch (err) {
-      alert('Chạm lại nút để bật nhạc (trình duyệt yêu cầu).');
+      alert('Chạm lại nút để bật nhạc (trình duyệt yêu cầu tương tác).');
     }
   } else {
     bgMusic.pause();
@@ -286,13 +296,29 @@ volumeSlider.addEventListener('input', function() {
   bgMusic.volume = volumeSlider.value / 100;
 });
 
+// Hỗ trợ phím trên desktop + Enter trên mobile
+document.addEventListener('keydown', function(e) {
+  if (document.getElementById('gameScreen').classList.contains('active')) {
+    if (currentMode === 'quiz' && !answered) {
+      if (e.key >= '1' && e.key <= '4') {
+        selectChoice(parseInt(e.key) - 1);
+      }
+    }
+    if (currentMode === 'arrange' && e.key === 'Enter') {
+      e.preventDefault();
+      checkArrangeAnswer();
+    }
+  }
+});
+
 function shuffleArray(arr) {
   const a = arr.slice();
   for (let i = a.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     const t = a[i]; a[i] = a[j]; a[j] = t;
   }
-  if (a.join('') === arr.join('')) return shuffleArray(arr);
+  // Đảm bảo không trùng với gốc
+  if (a.join('') === arr.join('') && a.length > 1) return shuffleArray(arr);
   return a;
 }
 
@@ -333,7 +359,7 @@ function showQuestion() {
   }
   answered = false;
   const q = questions[currentIndex];
-  document.getElementById('progressBar').style.width = (currentIndex / questions.length * 100) + '%';
+  document.getElementById('progressBar').style.width = ((currentIndex / questions.length) * 100) + '%';
   document.getElementById('feedbackMessage').textContent = '';
   document.getElementById('feedbackMessage').className = 'feedback';
   document.getElementById('nextBtn').classList.add('hide');
@@ -373,7 +399,7 @@ function showQuestion() {
       clueBox.appendChild(tile);
     });
     userAnswer.value = '';
-    setTimeout(function() { userAnswer.focus(); }, 120);
+    setTimeout(function() { userAnswer.focus(); }, 150);
   }
 }
 
@@ -391,23 +417,5 @@ function selectChoice(index) {
     document.getElementById('feedbackMessage').className = 'feedback good';
   } else {
     buttons[index].classList.add('wrong');
-    buttons[q.correct].classList.add('correct');
-    document.getElementById('feedbackMessage').textContent = '❌ Sai rồi! Đáp án đúng là: ' + q.choices[q.correct];
-    document.getElementById('feedbackMessage').className = 'feedback bad';
-  }
-  document.getElementById('scoreTracker').textContent = 'Điểm: ' + score;
-  document.getElementById('nextBtn').classList.remove('hide');
-}
-
-function checkArrangeAnswer() {
-  if (answered) return;
-  const userAnswer = document.getElementById('userAnswer');
-  let val = userAnswer.value.trim().toUpperCase().replace(/\s+/g, ' ');
-  if (!val) return;
-  answered = true;
-  const q = questions[currentIndex];
-  const correctNorm = q.correct.toUpperCase().replace(/\s+/g, ' ');
-
-  if (val === correctNorm) {
-    score += 15;
-    document.getElementById('feedbackMessage').textContent = '
+    if (buttons[q.correct]) buttons[q.correct].classList.add('correct');
+    document.getElementById('feedbackMessage').textContent = '❌ Sai rồi! Đáp án đúng là: ' + 
