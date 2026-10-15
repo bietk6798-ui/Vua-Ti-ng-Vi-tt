@@ -10,7 +10,7 @@
 *{box-sizing:border-box}
 body{margin:0;min-height:100vh;color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;overflow-x:hidden;background:radial-gradient(ellipse at 50% 35%,#1767b5 0,#092c78 38%,#03103c 78%,#02082b 100%);background-attachment:fixed}
 body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;background:linear-gradient(180deg,#04103b33 0%,transparent 40%,#02082b88 100%),radial-gradient(circle at 8% 55%,#3fc8ff33 0 2px,transparent 3px),radial-gradient(circle at 88% 43%,#fff6 0 2px,transparent 3px),radial-gradient(circle at 20% 25%,#ffd166aa 0 2px,transparent 3px),radial-gradient(circle at 75% 17%,#fff7 0 2px,transparent 3px)}
-button,input{font:inherit}button{cursor:pointer;touch-action:manipulation}
+button,input{font:inherit}button{cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .wrap{width:min(1180px,100%);margin:auto;padding:16px 18px 30px;position:relative}
 .top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px}
 .audio-panel{background:linear-gradient(135deg,#172f87f2,#111b5df2);border:2px solid #584bff;border-radius:17px;padding:10px 13px;box-shadow:0 0 18px #292cff55;min-width:220px}
@@ -32,7 +32,7 @@ button,input{font:inherit}button{cursor:pointer;touch-action:manipulation}
 .hero p{color:var(--muted);max-width:620px;margin:12px auto}
 .modes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:22px 0}
 .mode{background:linear-gradient(145deg,#172f87,#111b5d);border:1px solid #46568d;border-radius:22px;padding:24px 20px;text-align:left;color:var(--ink);min-height:190px;transition:transform .15s,border-color .15s}
-.mode:hover{transform:translateY(-3px);border-color:var(--gold)}
+.mode:hover,.mode:active{transform:translateY(-3px);border-color:var(--gold)}
 .mode .emoji{font-size:2.3rem}
 .mode h2{margin:12px 0 7px;font-size:1.25rem}
 .mode p{margin:0;color:var(--muted);line-height:1.5}
@@ -50,14 +50,16 @@ button,input{font:inherit}button{cursor:pointer;touch-action:manipulation}
 .choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;max-width:680px;margin:0 auto}
 .choice{display:flex;align-items:center;gap:12px;text-align:left;min-height:58px;padding:12px;border-radius:14px;border:1px solid #52629b;background:#06194d;color:var(--ink);font-weight:800;width:100%}
 .choice .letter{display:grid;place-items:center;flex:0 0 34px;height:34px;border-radius:10px;background:#123a8a;color:var(--gold)}
-.choice:active{transform:scale(.99)}
+.choice:active{transform:scale(.98)}
 .choice.correct{border-color:var(--mint);background:#0a4744}
 .choice.wrong{border-color:var(--pink);background:#4c1737}
+.choice:disabled{pointer-events:none;opacity:.85}
 .answerrow{display:flex;gap:9px;max-width:680px;margin:0 auto}
 .answerrow input{min-width:0;flex:1;background:#06194d;border:1px solid #52629b;border-radius:13px;color:white;padding:14px;font-size:1.05rem;outline:none}
 .answerrow input:focus{border-color:var(--mint)}
-.btn{border:1px solid #52629b;background:#123a8a;color:var(--ink);padding:10px 18px;border-radius:13px;font-weight:750}
+.btn{border:1px solid #52629b;background:#123a8a;color:var(--ink);padding:12px 18px;border-radius:13px;font-weight:750;min-height:48px}
 .btn.primary{background:linear-gradient(120deg,#f8bd4d,#ffdc7d);color:#06194d;border:0}
+.btn:active{transform:scale(.97)}
 .feedback{min-height:32px;margin:14px 0 4px;text-align:center;font-weight:800}
 .feedback.good{color:var(--mint)}
 .feedback.bad{color:var(--pink)}
@@ -67,6 +69,10 @@ button,input{font:inherit}button{cursor:pointer;touch-action:manipulation}
   .choices{grid-template-columns:1fr}
   .modes{grid-template-columns:1fr}
   .answerrow{flex-direction:column}
+  .mode{min-height:auto;padding:20px 16px}
+  .btn{width:100%;text-align:center}
+  .gamefoot{flex-direction:column}
+  .gamefoot .btn{width:100%}
 }
 </style>
 </head>
@@ -79,7 +85,7 @@ button,input{font:inherit}button{cursor:pointer;touch-action:manipulation}
       <div class="audio-title">
         <div class="round-icon">🔊</div>
         <span>Âm thanh nền</span>
-        <button class="toggle" aria-pressed="false" id="audioToggle"><span></span></button>
+        <button class="toggle" aria-pressed="false" id="audioToggle" type="button"><span></span></button>
       </div>
       <div class="sliderline">
         <span>Âm lượng</span>
@@ -91,7 +97,7 @@ button,input{font:inherit}button{cursor:pointer;touch-action:manipulation}
       <div class="crown">👑</div>
       <h2 class="brand">Vua <span>Tiếng Việt</span></h2>
     </div>
-    <div></div><div></div>
+    <div></div>
   </div>
 
   <!-- Màn hình chính chọn chế độ -->
@@ -103,18 +109,18 @@ button,input{font:inherit}button{cursor:pointer;touch-action:manipulation}
     </div>
 
     <div class="modes">
-      <button class="mode" onclick="startGame('quiz')">
+      <button class="mode" type="button" onclick="startGame('quiz')">
         <div class="emoji">🧩</div>
         <h2>Trắc Nghiệm</h2>
         <p>Chọn phương án đúng nhất để hoàn thành từ hoặc câu có nghĩa.</p>
-        <span class="tag">Dễ chơi (Phím 1-4)</span>
+        <span class="tag">Dễ chơi (Phím 1-4 / Chạm)</span>
       </button>
 
-      <button class="mode" onclick="startGame('arrange')">
+      <button class="mode" type="button" onclick="startGame('arrange')">
         <div class="emoji">✏️</div>
         <h2>Sắp Xếp Từ</h2>
         <p>Gõ lại đáp án hoàn chỉnh từ các ký tự bị đảo lộn vị trí.</p>
-        <span class="tag">Thách thức (Enter)</span>
+        <span class="tag">Thách thức (Enter / Chạm Gửi)</span>
       </button>
     </div>
   </div>
@@ -139,16 +145,16 @@ button,input{font:inherit}button{cursor:pointer;touch-action:manipulation}
 
       <!-- Khu vực nhập đáp án cho Chế độ Sắp Xếp Từ -->
       <div class="answerrow hide" id="inputBox">
-        <input type="text" id="userAnswer" placeholder="Nhập câu trả lời rồi nhấn Enter..." autocomplete="off" enterkeyhint="done">
-        <button class="btn primary" id="submitBtn" onclick="checkArrangeAnswer()">Gửi</button>
+        <input type="text" id="userAnswer" placeholder="Nhập câu trả lời rồi nhấn Enter..." autocomplete="off" enterkeyhint="done" autocapitalize="characters">
+        <button class="btn primary" id="submitBtn" type="button" onclick="checkArrangeAnswer()">Gửi</button>
       </div>
     </div>
 
     <div class="feedback" id="feedbackMessage"></div>
 
     <div class="gamefoot">
-      <button class="btn" onclick="backToHome()">🏠 Về trang chủ</button>
-      <button class="btn primary hide" id="nextBtn" onclick="nextQuestion()">Tiếp theo ➡️ (Space)</button>
+      <button class="btn" type="button" onclick="backToHome()">🏠 Về trang chủ</button>
+      <button class="btn primary hide" id="nextBtn" type="button" onclick="nextQuestion()">Tiếp theo ➡️</button>
     </div>
   </div>
 </div>
@@ -158,14 +164,256 @@ button,input{font:inherit}button{cursor:pointer;touch-action:manipulation}
 const QUIZ_DATA = [
   { q: "Từ nào sau đây viết đúng chính tả?", choices: ["Súc tích", "Xúc tích", "Súc tich", "Xúc tich"], correct: 0, hint: "Từ chỉ sự cô đọng, ngắn gọn nhưng đầy đủ." },
   { q: "Điền vào chỗ trống: 'Xôi hỏng bỏng ...'", choices: ["Chanh", "Không", "Không đuôi", "Bẻ"], correct: 1, hint: "Thành ngữ chỉ việc mất hết tất cả mọi đường." },
-  { q: "Từ nào chỉ một bộ phận trên khuôn mặt?", choices: ["Lông mày", "Lông mài", "Nông mày", "Nông mài"], correct: 0, hint: "Dải lông mọc phía trên bầu mắt." }
+  { q: "Từ nào chỉ một bộ phận trên khuôn mặt?", choices: ["Lông mày", "Lông mài", "Nông mày", "Nông mài"], correct: 0, hint: "Dải lông mọc phía trên bầu mắt." },
+  { q: "Từ nào viết đúng?", choices: ["Xúc động", "Súc động", "Xúc đọng", "Súc đọng"], correct: 0, hint: "Cảm xúc mạnh mẽ, sâu sắc." },
+  { q: "Thành ngữ: 'Một chín một ...'", choices: ["Mười", "Mươi", "Muỗi", "Mượn"], correct: 0, hint: "Chỉ sự ngang bằng, cân sức." }
 ];
 
 const ARRANGE_DATA = [
   { scrambled: ["U", "Y", "Ê", "N", "G", "N"], correct: "NGUYÊN", hint: "Từ chỉ trạng thái còn nguyên vẹn." },
   { scrambled: ["H", "Ư", "N", "G", "N", "G", "Ợ"], correct: "NGƯỢNG", hint: "Cảm giác e thẹn, xấu hổ nhẹ." },
-  { scrambled: ["T", "I", "Ế", "G", "N", "V", "I", "Ệ", "T"], correct: "TIẾNG VIỆT", hint: "Ngôn ngữ quốc gia của Việt Nam." }
+  { scrambled: ["T", "I", "Ế", "G", "N", "V", "I", "Ệ", "T"], correct: "TIẾNG VIỆT", hint: "Ngôn ngữ quốc gia của Việt Nam." },
+  { scrambled: ["H", "Ọ", "C", "S", "I", "N", "H"], correct: "HỌC SINH", hint: "Người đang theo học tại trường." },
+  { scrambled: ["V", "I", "Ệ", "T", "N", "A", "M"], correct: "VIỆT NAM", hint: "Tên đất nước của chúng ta." }
 ];
 
 let currentMode = '';
-  
+let questions = [];
+let currentIndex = 0;
+let score = 0;
+let answered = false;
+
+// --- Audio (giả lập âm thanh nền đơn giản) ---
+let audioCtx = null;
+let isAudioOn = false;
+let volume = 0.5;
+
+function initAudio() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+}
+
+function playTone(freq = 440, duration = 0.15) {
+  if (!isAudioOn || !audioCtx) return;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  osc.frequency.value = freq;
+  gain.gain.value = volume * 0.3;
+  osc.start();
+  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+  osc.stop(audioCtx.currentTime + duration);
+}
+
+// --- Khởi tạo UI âm thanh ---
+document.getElementById('audioToggle').addEventListener('click', function () {
+  isAudioOn = !isAudioOn;
+  this.setAttribute('aria-pressed', isAudioOn);
+  if (isAudioOn) {
+    initAudio();
+    playTone(523, 0.1);
+  }
+});
+
+document.getElementById('volumeSlider').addEventListener('input', function () {
+  volume = this.value / 100;
+});
+
+// --- Bắt đầu game ---
+function startGame(mode) {
+  currentMode = mode;
+  questions = mode === 'quiz' ? [...QUIZ_DATA] : [...ARRANGE_DATA];
+  currentIndex = 0;
+  score = 0;
+  answered = false;
+
+  document.getElementById('homeScreen').classList.add('hide');
+  document.getElementById('gameScreen').classList.add('active');
+  document.getElementById('gameModeTitle').textContent = mode === 'quiz' ? 'Chế độ: Trắc nghiệm' : 'Chế độ: Sắp xếp từ';
+  document.getElementById('scoreTracker').textContent = 'Điểm: 0';
+  document.getElementById('progressBar').style.width = '0%';
+  document.getElementById('nextBtn').classList.add('hide');
+  document.getElementById('feedbackMessage').textContent = '';
+  document.getElementById('feedbackMessage').className = 'feedback';
+
+  showQuestion();
+}
+
+// --- Hiển thị câu hỏi ---
+function showQuestion() {
+  if (currentIndex >= questions.length) {
+    endGame();
+    return;
+  }
+
+  answered = false;
+  const q = questions[currentIndex];
+  const progress = ((currentIndex) / questions.length) * 100;
+  document.getElementById('progressBar').style.width = progress + '%';
+  document.getElementById('feedbackMessage').textContent = '';
+  document.getElementById('feedbackMessage').className = 'feedback';
+  document.getElementById('nextBtn').classList.add('hide');
+
+  const clueBox = document.getElementById('clueBox');
+  const choicesBox = document.getElementById('choicesBox');
+  const inputBox = document.getElementById('inputBox');
+  const userAnswer = document.getElementById('userAnswer');
+
+  if (currentMode === 'quiz') {
+    document.getElementById('questionPrompt').textContent = q.q;
+    document.getElementById('hintText').textContent = 'Gợi ý: ' + q.hint;
+    clueBox.classList.add('hide');
+    inputBox.classList.add('hide');
+    choicesBox.classList.remove('hide');
+    choicesBox.innerHTML = '';
+
+    q.choices.forEach((choice, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'choice';
+      btn.type = 'button';
+      btn.innerHTML = `<span class="letter">\( {i + 1}</span><span> \){choice}</span>`;
+      btn.onclick = () => selectChoice(i);
+      // Hỗ trợ touch tốt hơn trên mobile
+      btn.addEventListener('touchstart', function (e) {
+        e.preventDefault(); // tránh double-tap zoom
+        this.click();
+      }, { passive: false });
+      choicesBox.appendChild(btn);
+    });
+  } else {
+    // Arrange mode
+    document.getElementById('questionPrompt').textContent = 'Sắp xếp lại các chữ cái thành từ đúng';
+    document.getElementById('hintText').textContent = 'Gợi ý: ' + q.hint;
+    choicesBox.classList.add('hide');
+    inputBox.classList.remove('hide');
+    clueBox.classList.remove('hide');
+    clueBox.innerHTML = '';
+    q.scrambled.forEach(letter => {
+      const tile = document.createElement('div');
+      tile.className = 'wordtile';
+      tile.textContent = letter;
+      clueBox.appendChild(tile);
+    });
+    userAnswer.value = '';
+    userAnswer.focus();
+  }
+}
+
+// --- Chọn đáp án trắc nghiệm ---
+function selectChoice(index) {
+  if (answered) return;
+  answered = true;
+
+  const q = questions[currentIndex];
+  const buttons = document.querySelectorAll('#choicesBox .choice');
+  buttons.forEach(b => b.disabled = true);
+
+  const isCorrect = index === q.correct;
+  if (isCorrect) {
+    score += 10;
+    buttons[index].classList.add('correct');
+    document.getElementById('feedbackMessage').textContent = '🎉 Chính xác! +10 điểm';
+    document.getElementById('feedbackMessage').className = 'feedback good';
+    playTone(659, 0.2);
+  } else {
+    buttons[index].classList.add('wrong');
+    buttons[q.correct].classList.add('correct');
+    document.getElementById('feedbackMessage').textContent = '❌ Sai rồi! Đáp án đúng là: ' + q.choices[q.correct];
+    document.getElementById('feedbackMessage').className = 'feedback bad';
+    playTone(220, 0.3);
+  }
+
+  document.getElementById('scoreTracker').textContent = 'Điểm: ' + score;
+  document.getElementById('nextBtn').classList.remove('hide');
+}
+
+// --- Kiểm tra đáp án sắp xếp từ ---
+function checkArrangeAnswer() {
+  if (answered) return;
+  const userAnswer = document.getElementById('userAnswer');
+  const val = userAnswer.value.trim().toUpperCase().replace(/\s+/g, ' ');
+  if (!val) return;
+
+  answered = true;
+  const q = questions[currentIndex];
+  const isCorrect = val === q.correct.toUpperCase();
+
+  if (isCorrect) {
+    score += 15;
+    document.getElementById('feedbackMessage').textContent = '🎉 Xuất sắc! +15 điểm';
+    document.getElementById('feedbackMessage').className = 'feedback good';
+    playTone(659, 0.2);
+  } else {
+    document.getElementById('feedbackMessage').textContent = '❌ Sai rồi! Đáp án đúng là: ' + q.correct;
+    document.getElementById('feedbackMessage').className = 'feedback bad';
+    playTone(220, 0.3);
+  }
+
+  document.getElementById('scoreTracker').textContent = 'Điểm: ' + score;
+  document.getElementById('nextBtn').classList.remove('hide');
+  userAnswer.blur();
+}
+
+// --- Câu tiếp theo ---
+function nextQuestion() {
+  currentIndex++;
+  showQuestion();
+}
+
+// --- Kết thúc game ---
+function endGame() {
+  document.getElementById('progressBar').style.width = '100%';
+  document.getElementById('questionPrompt').textContent = 'Hoàn thành!';
+  document.getElementById('hintText').textContent = `Bạn đạt ${score} điểm trên ${questions.length * (currentMode === 'quiz' ? 10 : 15)} điểm tối đa.`;
+  document.getElementById('clueBox').classList.add('hide');
+  document.getElementById('choicesBox').classList.add('hide');
+  document.getElementById('inputBox').classList.add('hide');
+  document.getElementById('feedbackMessage').textContent = score >= questions.length * (currentMode === 'quiz' ? 7 : 10) ? '👑 Bạn xứng đáng là Vua Tiếng Việt!' : '💪 Cố gắng thêm lần sau nhé!';
+  document.getElementById('feedbackMessage').className = 'feedback good';
+  document.getElementById('nextBtn').classList.add('hide');
+  playTone(784, 0.4);
+}
+
+// --- Về trang chủ ---
+function backToHome() {
+  document.getElementById('gameScreen').classList.remove('active');
+  document.getElementById('homeScreen').classList.remove('hide');
+  currentMode = '';
+}
+
+// --- Hỗ trợ bàn phím + mobile Enter ---
+document.addEventListener('keydown', function (e) {
+  if (!document.getElementById('gameScreen').classList.contains('active')) return;
+
+  if (currentMode === 'quiz' && !answered) {
+    if (e.key >= '1' && e.key <= '4') {
+      const idx = parseInt(e.key) - 1;
+      if (idx < questions[currentIndex].choices.length) {
+        selectChoice(idx);
+      }
+    }
+  }
+
+  if (currentMode === 'arrange' && e.key === 'Enter' && !answered) {
+    e.preventDefault();
+    checkArrangeAnswer();
+  }
+
+  if (e.key === ' ' && !document.getElementById('nextBtn').classList.contains('hide')) {
+    e.preventDefault();
+    nextQuestion();
+  }
+});
+
+// Cho phép nhấn Enter trên input mobile
+document.getElementById('userAnswer').addEventListener('keydown', function (e) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    checkArrangeAnswer();
+  }
+});
+</script>
+</body>
+</html>
