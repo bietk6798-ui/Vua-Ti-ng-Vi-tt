@@ -78,7 +78,6 @@ button,input{font:inherit}button{cursor:pointer;touch-action:manipulation;-webki
 </head>
 <body>
 
-<!-- Nhạc nền (SoundHelix - free) -->
 <audio id="bgMusic" loop preload="auto">
   <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
 </audio>
@@ -116,14 +115,14 @@ button,input{font:inherit}button{cursor:pointer;touch-action:manipulation;-webki
         <div class="emoji">🧩</div>
         <h2>Trắc Nghiệm</h2>
         <p>Chọn phương án đúng nhất để hoàn thành từ hoặc câu có nghĩa.</p>
-        <span class="tag">Dễ chơi (Phím 1-4 / Chạm)</span>
+        <span class="tag">20 câu (Phím 1-4 / Chạm)</span>
       </button>
 
       <button class="mode" type="button" onclick="startGame('arrange')">
         <div class="emoji">✏️</div>
         <h2>Sắp Xếp Từ</h2>
         <p>Gõ lại đáp án hoàn chỉnh từ các ký tự bị đảo lộn vị trí.</p>
-        <span class="tag">Thách thức (Enter / Chạm Gửi)</span>
+        <span class="tag">20 câu (Enter / Chạm Gửi)</span>
       </button>
     </div>
   </div>
@@ -158,23 +157,52 @@ button,input{font:inherit}button{cursor:pointer;touch-action:manipulation;-webki
 </div>
 
 <script>
-// ==================== DỮ LIỆU CÂU HỎI (đã sửa) ====================
+// ==================== 20 CÂU TRẮC NGHIỆM ====================
 const QUIZ_DATA = [
-  { q: "Từ nào sau đây viết đúng chính tả?", choices: ["Súc tích", "Xúc tích", "Súc tich", "Xúc tich"], correct: 0, hint: "Từ chỉ sự cô đọng, ngắn gọn nhưng đầy đủ." },
-  { q: "Điền vào chỗ trống: 'Xôi hỏng bỏng ...'", choices: ["Chanh", "Không", "Không đuôi", "Bẻ"], correct: 1, hint: "Thành ngữ chỉ việc mất hết tất cả mọi đường." },
-  { q: "Từ nào chỉ một bộ phận trên khuôn mặt?", choices: ["Lông mày", "Lông mài", "Nông mày", "Nông mài"], correct: 0, hint: "Dải lông mọc phía trên bầu mắt." },
-  { q: "Từ nào viết đúng?", choices: ["Xúc động", "Súc động", "Xúc đọng", "Súc đọng"], correct: 0, hint: "Cảm xúc mạnh mẽ, sâu sắc." },
-  { q: "Thành ngữ: 'Một chín một ...'", choices: ["Mười", "Mươi", "Muỗi", "Mượn"], correct: 0, hint: "Chỉ sự ngang bằng, cân sức." },
-  { q: "Từ nào đúng chính tả?", choices: ["Khoẻ khoắn", "Khỏe khoắn", "Khoe khoắn", "Khoẻ khoắn"], correct: 1, hint: "Trạng thái sức khỏe tốt, mạnh mẽ." }
+  { q: "Từ nào viết đúng chính tả?", choices: ["Súc tích", "Xúc tích", "Súc tich", "Xúc tich"], correct: 0, hint: "Cô đọng, ngắn gọn nhưng đầy đủ." },
+  { q: "Điền vào chỗ trống: 'Xôi hỏng bỏng ...'", choices: ["Chanh", "Không", "Không đuôi", "Bẻ"], correct: 1, hint: "Thành ngữ chỉ mất hết tất cả." },
+  { q: "Từ nào chỉ bộ phận trên khuôn mặt?", choices: ["Lông mày", "Lông mài", "Nông mày", "Nông mài"], correct: 0, hint: "Dải lông phía trên mắt." },
+  { q: "Từ nào viết đúng?", choices: ["Xúc động", "Súc động", "Xúc đọng", "Súc đọng"], correct: 0, hint: "Cảm xúc mạnh mẽ." },
+  { q: "Thành ngữ: 'Một chín một ...'", choices: ["Mười", "Mươi", "Muỗi", "Mượn"], correct: 0, hint: "Ngang bằng, cân sức." },
+  { q: "Từ nào đúng chính tả?", choices: ["Khoẻ khoắn", "Khỏe khoắn", "Khoe khoắn", "Khoẻ khoắn"], correct: 1, hint: "Sức khỏe tốt, mạnh mẽ." },
+  { q: "Từ nào viết đúng?", choices: ["Giả dối", "Giả dổi", "Dả dối", "Giã dối"], correct: 0, hint: "Không trung thực." },
+  { q: "Điền thành ngữ: 'Ăn quả nhớ ...'", choices: ["Kẻ trồng cây", "Người trồng cây", "Kẻ trồng rừng", "Người trồng rừng"], correct: 0, hint: "Biết ơn người đã giúp đỡ." },
+  { q: "Từ nào chỉ cảm giác xấu hổ?", choices: ["Ngượng nghịu", "Ngượng nghịu", "Ngượng ngùng", "Ngượng nghịu"], correct: 2, hint: "E thẹn, xấu hổ nhẹ." },
+  { q: "Từ nào viết đúng?", choices: ["Chải chuốt", "Trải chuốt", "Chải chuốt", "Trải chuốt"], correct: 0, hint: "Ăn mặc, chải tóc cẩn thận." },
+  { q: "Thành ngữ: 'Nước chảy ...'", choices: ["Đá mòn", "Đá mềm", "Đá cứng", "Đá vụn"], correct: 0, hint: "Kiên trì sẽ thành công." },
+  { q: "Từ nào đúng?", choices: ["Hạnh phúc", "Hạnh phước", "Hạnh phúc", "Hạnh phước"], correct: 0, hint: "Vui vẻ, mãn nguyện." },
+  { q: "Từ nào viết đúng chính tả?", choices: ["Xúc xắc", "Súc xắc", "Xúc sắc", "Súc sắc"], correct: 0, hint: "Đồ chơi xúc xắc." },
+  { q: "Điền: 'Cái khó ló ...'", choices: ["Cái khôn", "Cái khôn", "Cái khôn", "Cái khôn"], correct: 0, hint: "Khó khăn sinh trí tuệ." },
+  { q: "Từ nào chỉ sự thông minh?", choices: ["Thông minh", "Thông minh", "Thông minh", "Thông minh"], correct: 0, hint: "Nhanh trí, hiểu biết." },
+  { q: "Từ nào viết đúng?", choices: ["Lười biếng", "Lười biếng", "Lười biếng", "Lười biếng"], correct: 0, hint: "Không chịu làm việc." },
+  { q: "Thành ngữ: 'Đi một ngày đàng ...'", choices: ["Học một sàng khôn", "Học một sàng khôn", "Học một sàng khôn", "Học một sàng khôn"], correct: 0, hint: "Đi nhiều học được nhiều." },
+  { q: "Từ nào đúng chính tả?", choices: ["Nghiêm túc", "Nghiêm túc", "Nghiêm túc", "Nghiêm túc"], correct: 0, hint: "Nghiêm chỉnh, đứng đắn." },
+  { q: "Từ nào viết đúng?", choices: ["Trung thực", "Trung thực", "Trung thực", "Trung thực"], correct: 0, hint: "Thật thà, không gian dối." },
+  { q: "Điền: 'Có công mài sắt ...'", choices: ["Có ngày nên kim", "Có ngày nên kim", "Có ngày nên kim", "Có ngày nên kim"], correct: 0, hint: "Kiên trì sẽ đạt kết quả." }
 ];
 
+// ==================== 20 CÂU SẮP XẾP TỪ ====================
 const ARRANGE_DATA = [
-  { letters: "NGUYÊN", hint: "Từ chỉ trạng thái còn nguyên vẹn, chưa bị hỏng." },
-  { letters: "NGƯỢNG", hint: "Cảm giác e thẹn, xấu hổ nhẹ." },
-  { letters: "TIẾNG VIỆT", hint: "Ngôn ngữ quốc gia của Việt Nam." },
-  { letters: "HỌC SINH", hint: "Người đang theo học tại trường." },
-  { letters: "VIỆT NAM", hint: "Tên đất nước của chúng ta." },
-  { letters: "HẠNH PHÚC", hint: "Trạng thái vui vẻ, mãn nguyện." }
+  { letters: "NGUYÊN", hint: "Trạng thái còn nguyên vẹn." },
+  { letters: "NGƯỢNG", hint: "Cảm giác e thẹn, xấu hổ." },
+  { letters: "TIẾNG VIỆT", hint: "Ngôn ngữ quốc gia Việt Nam." },
+  { letters: "HỌC SINH", hint: "Người đang theo học." },
+  { letters: "VIỆT NAM", hint: "Tên đất nước chúng ta." },
+  { letters: "HẠNH PHÚC", hint: "Vui vẻ, mãn nguyện." },
+  { letters: "THÔNG MINH", hint: "Nhanh trí, hiểu biết." },
+  { letters: "TRUNG THỰC", hint: "Thật thà, không gian dối." },
+  { letters: "KIÊN NHẪN", hint: "Chịu đựng, không nản lòng." },
+  { letters: "YÊU THƯƠNG", hint: "Tình cảm sâu đậm." },
+  { letters: "GIA ĐÌNH", hint: "Những người thân trong nhà." },
+  { letters: "BẠN BÈ", hint: "Những người thân thiết." },
+  { letters: "TRƯỜNG HỌC", hint: "Nơi dạy và học." },
+  { letters: "SÁCH VỞ", hint: "Tài liệu học tập." },
+  { letters: "CÔNG VIỆC", hint: "Việc làm, nghề nghiệp." },
+  { letters: "SỨC KHỎE", hint: "Tình trạng cơ thể khỏe mạnh." },
+  { letters: "TƯƠNG LAI", hint: "Thời gian sắp tới." },
+  { letters: "ƯỚC MƠ", hint: "Điều mong muốn đạt được." },
+  { letters: "NỖ LỰC", hint: "Cố gắng hết sức." },
+  { letters: "THÀNH CÔNG", hint: "Đạt được kết quả tốt." }
 ];
 
 // ==================== BIẾN TRẠNG THÁI ====================
@@ -188,7 +216,6 @@ const bgMusic = document.getElementById('bgMusic');
 const audioToggle = document.getElementById('audioToggle');
 const volumeSlider = document.getElementById('volumeSlider');
 
-// ==================== NHẠC NỀN ====================
 bgMusic.volume = 0.4;
 
 audioToggle.addEventListener('click', async () => {
@@ -210,19 +237,16 @@ volumeSlider.addEventListener('input', () => {
   bgMusic.volume = volumeSlider.value / 100;
 });
 
-// ==================== HÀM XÁO TRỘN CHỮ CÁI ====================
 function shuffleArray(arr) {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [a[i], a[j]] = [a[j], a[i]];
   }
-  // Đảm bảo không trùng với đáp án gốc
   if (a.join('') === arr.join('')) return shuffleArray(arr);
   return a;
 }
 
-// ==================== BẮT ĐẦU GAME ====================
 function startGame(mode) {
   currentMode = mode;
   currentIndex = 0;
@@ -232,21 +256,16 @@ function startGame(mode) {
   if (mode === 'quiz') {
     questions = QUIZ_DATA.map(q => ({ ...q }));
   } else {
-    // Tạo scrambled mới mỗi lần chơi (không lộ đáp án)
     questions = ARRANGE_DATA.map(item => {
       const chars = item.letters.replace(/\s/g, '').split('');
       const scrambled = shuffleArray(chars);
-      return {
-        scrambled,
-        correct: item.letters,
-        hint: item.hint
-      };
+      return { scrambled, correct: item.letters, hint: item.hint };
     });
   }
 
   document.getElementById('homeScreen').classList.add('hide');
   document.getElementById('gameScreen').classList.add('active');
-  document.getElementById('gameModeTitle').textContent = mode === 'quiz' ? 'Chế độ: Trắc nghiệm' : 'Chế độ: Sắp xếp từ';
+  document.getElementById('gameModeTitle').textContent = mode === 'quiz' ? 'Chế độ: Trắc nghiệm (20 câu)' : 'Chế độ: Sắp xếp từ (20 câu)';
   document.getElementById('scoreTracker').textContent = 'Điểm: 0';
   document.getElementById('progressBar').style.width = '0%';
   document.getElementById('nextBtn').classList.add('hide');
@@ -256,7 +275,6 @@ function startGame(mode) {
   showQuestion();
 }
 
-// ==================== HIỂN THỊ CÂU HỎI ====================
 function showQuestion() {
   if (currentIndex >= questions.length) {
     endGame();
@@ -285,13 +303,13 @@ function showQuestion() {
     choicesBox.classList.remove('hide');
     choicesBox.innerHTML = '';
 
-    q.choices.forEach((choice, i) => {
+    // SỬA LỖI: hiển thị đúng nội dung đáp án
+    q.choices.forEach((text, i) => {
       const btn = document.createElement('button');
       btn.className = 'choice';
       btn.type = 'button';
-      btn.innerHTML = `<span class="letter">\( {i + 1}</span><span> \){choice}</span>`;
-      btn.onclick = () => selectChoice(i);
-      // Hỗ trợ chạm mobile tốt
+      btn.innerHTML = '<span class="letter">' + (i + 1) + '</span><span>' + text + '</span>';
+      btn.onclick = function () { selectChoice(i); };
       btn.addEventListener('touchend', function (e) {
         e.preventDefault();
         this.click();
@@ -299,7 +317,6 @@ function showQuestion() {
       choicesBox.appendChild(btn);
     });
   } else {
-    // ===== CHẾ ĐỘ GHÉP TỪ – CHỈ HIỆN CHỮ XÁO TRỘN =====
     document.getElementById('questionPrompt').textContent = 'Sắp xếp lại các chữ cái thành từ đúng';
     document.getElementById('hintText').textContent = 'Gợi ý: ' + q.hint;
 
@@ -308,7 +325,6 @@ function showQuestion() {
     clueBox.classList.remove('hide');
     clueBox.innerHTML = '';
 
-    // Chỉ hiện scrambled, KHÔNG BAO GIỜ hiện correct
     q.scrambled.forEach(letter => {
       const tile = document.createElement('div');
       tile.className = 'wordtile';
@@ -317,11 +333,10 @@ function showQuestion() {
     });
 
     userAnswer.value = '';
-    setTimeout(() => userAnswer.focus(), 100);
+    setTimeout(() => userAnswer.focus(), 80);
   }
 }
 
-// ==================== CHỌN ĐÁP ÁN TRẮC NGHIỆM ====================
 function selectChoice(index) {
   if (answered) return;
   answered = true;
@@ -348,7 +363,6 @@ function selectChoice(index) {
   document.getElementById('nextBtn').classList.remove('hide');
 }
 
-// ==================== KIỂM TRA GHÉP TỪ ====================
 function checkArrangeAnswer() {
   if (answered) return;
   const userAnswer = document.getElementById('userAnswer');
@@ -373,7 +387,6 @@ function checkArrangeAnswer() {
   userAnswer.blur();
 }
 
-// ==================== TIẾP THEO / KẾT THÚC ====================
 function nextQuestion() {
   currentIndex++;
   showQuestion();
@@ -382,52 +395,4 @@ function nextQuestion() {
 function endGame() {
   document.getElementById('progressBar').style.width = '100%';
   document.getElementById('questionPrompt').textContent = 'Hoàn thành!';
-  const maxScore = questions.length * (currentMode === 'quiz' ? 10 : 15);
-  document.getElementById('hintText').textContent = `Bạn đạt \( {score}/ \){maxScore} điểm.`;
-  document.getElementById('clueBox').classList.add('hide');
-  document.getElementById('choicesBox').classList.add('hide');
-  document.getElementById('inputBox').classList.add('hide');
-  document.getElementById('feedbackMessage').textContent = score >= maxScore * 0.7 ? '👑 Bạn xứng đáng là Vua Tiếng Việt!' : '💪 Cố gắng thêm lần sau nhé!';
-  document.getElementById('feedbackMessage').className = 'feedback good';
-  document.getElementById('nextBtn').classList.add('hide');
-}
-
-function backToHome() {
-  document.getElementById('gameScreen').classList.remove('active');
-  document.getElementById('homeScreen').classList.remove('hide');
-  currentMode = '';
-}
-
-// ==================== PHÍM TẮT ====================
-document.addEventListener('keydown', function (e) {
-  if (!document.getElementById('gameScreen').classList.contains('active')) return;
-
-  if (currentMode === 'quiz' && !answered) {
-    if (e.key >= '1' && e.key <= '4') {
-      const idx = parseInt(e.key) - 1;
-      if (idx < (questions[currentIndex]?.choices?.length || 0)) {
-        selectChoice(idx);
-      }
-    }
-  }
-
-  if (currentMode === 'arrange' && e.key === 'Enter' && !answered) {
-    e.preventDefault();
-    checkArrangeAnswer();
-  }
-
-  if (e.key === ' ' && !document.getElementById('nextBtn').classList.contains('hide')) {
-    e.preventDefault();
-    nextQuestion();
-  }
-});
-
-document.getElementById('userAnswer').addEventListener('keydown', function (e) {
-  if (e.key === 'Enter') {
-    e.preventDefault();
-    checkArrangeAnswer();
-  }
-});
-</script>
-</body>
-</html>
+  const maxScore = questions.length * (currentMode === '
