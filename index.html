@@ -2,15 +2,23 @@
 <html lang="vi">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1">
 <meta name="theme-color" content="#10152e">
 <title>Vua Tiếng Việt — Thử thách</title>
 <style>
 :root{--bg:#06194d;--panel:#102b70;--panel2:#123a8a;--ink:#fffdf6;--muted:#d5e7ff;--gold:#ffd43b;--mint:#50ffe1;--pink:#ff85cf;--blue:#5bcaff}
-*{box-sizing:border-box}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{touch-action:manipulation}
 body{margin:0;min-height:100vh;color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;overflow-x:hidden;background:radial-gradient(ellipse at 50% 35%,#1767b5 0,#092c78 38%,#03103c 78%,#02082b 100%);background-attachment:fixed}
 body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;background:linear-gradient(180deg,#04103b33 0%,transparent 40%,#02082b88 100%),radial-gradient(circle at 8% 55%,#3fc8ff33 0 2px,transparent 3px),radial-gradient(circle at 88% 43%,#fff6 0 2px,transparent 3px),radial-gradient(circle at 20% 25%,#ffd166aa 0 2px,transparent 3px),radial-gradient(circle at 75% 17%,#fff7 0 2px,transparent 3px)}
-button,input{font:inherit}button{cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+button,input{font:inherit}
+button{
+  cursor:pointer;
+  touch-action:manipulation;
+  -webkit-user-select:none;
+  user-select:none;
+  border:none;
+}
 .wrap{width:min(1180px,100%);margin:auto;padding:16px 18px 30px;position:relative}
 .top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px}
 .audio-panel{background:linear-gradient(135deg,#172f87f2,#111b5df2);border:2px solid #584bff;border-radius:17px;padding:10px 13px;box-shadow:0 0 18px #292cff55;min-width:220px}
@@ -31,8 +39,18 @@ button,input{font:inherit}button{cursor:pointer;touch-action:manipulation;-webki
 .hero h1{font-size:clamp(2rem,7vw,3.8rem);line-height:1.05;margin:10px 0}
 .hero p{color:var(--muted);max-width:620px;margin:12px auto}
 .modes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:22px 0}
-.mode{background:linear-gradient(145deg,#172f87,#111b5d);border:1px solid #46568d;border-radius:22px;padding:24px 20px;text-align:left;color:var(--ink);min-height:190px;transition:transform .15s,border-color .15s}
-.mode:hover,.mode:active{transform:translateY(-3px);border-color:var(--gold)}
+.mode{
+  background:linear-gradient(145deg,#172f87,#111b5d);
+  border:1px solid #46568d;
+  border-radius:22px;
+  padding:24px 20px;
+  text-align:left;
+  color:var(--ink);
+  min-height:190px;
+  transition:transform .15s,border-color .15s;
+  width:100%;
+}
+.mode:active{transform:scale(0.98);border-color:var(--gold)}
 .mode .emoji{font-size:2.3rem}
 .mode h2{margin:12px 0 7px;font-size:1.25rem}
 .mode p{margin:0;color:var(--muted);line-height:1.5}
@@ -47,32 +65,58 @@ button,input{font:inherit}button{cursor:pointer;touch-action:manipulation;-webki
 .hint{color:var(--muted);margin:0 0 18px}
 .clue{min-height:120px;display:flex;align-items:center;justify-content:center;gap:clamp(8px,2.5vw,16px);flex-wrap:wrap;margin:12px auto 20px;padding:16px;border-radius:20px;background:linear-gradient(135deg,#06194d,#123a8a);border:1px solid #3c4d84;max-width:680px}
 .clue .wordtile{font-size:clamp(1.4rem,3.8vw,2.2rem);font-weight:1000;letter-spacing:2px;padding:10px 14px;background:#172f87;border-radius:12px;border-bottom:4px solid #06194d;user-select:none}
-.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;max-width:680px;margin:0 auto}
-.choice{display:flex;align-items:center;gap:12px;text-align:left;min-height:58px;padding:12px;border-radius:14px;border:1px solid #52629b;background:#06194d;color:var(--ink);font-weight:800;width:100%}
-.choice .letter{display:grid;place-items:center;flex:0 0 34px;height:34px;border-radius:10px;background:#123a8a;color:var(--gold)}
-.choice:active{transform:scale(.98)}
+.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;max-width:680px;margin:0 auto}
+.choice{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  text-align:left;
+  min-height:56px;
+  padding:14px 12px;
+  border-radius:14px;
+  border:1px solid #52629b;
+  background:#06194d;
+  color:var(--ink);
+  font-weight:800;
+  width:100%;
+}
+.choice .letter{display:grid;place-items:center;flex:0 0 34px;height:34px;border-radius:10px;background:#123a8a;color:var(--gold);font-size:1rem}
+.choice:active{transform:scale(0.97);background:#0a1f5c}
 .choice.correct{border-color:var(--mint);background:#0a4744}
 .choice.wrong{border-color:var(--pink);background:#4c1737}
 .choice:disabled{pointer-events:none;opacity:.9}
 .answerrow{display:flex;gap:9px;max-width:680px;margin:0 auto}
 .answerrow input{min-width:0;flex:1;background:#06194d;border:1px solid #52629b;border-radius:13px;color:white;padding:14px;font-size:1.05rem;outline:none}
 .answerrow input:focus{border-color:var(--mint)}
-.btn{border:1px solid #52629b;background:#123a8a;color:var(--ink);padding:12px 18px;border-radius:13px;font-weight:750;min-height:48px}
+.btn{
+  border:1px solid #52629b;
+  background:#123a8a;
+  color:var(--ink);
+  padding:14px 18px;
+  border-radius:13px;
+  font-weight:750;
+  min-height:52px;
+  min-width:120px;
+}
 .btn.primary{background:linear-gradient(120deg,#f8bd4d,#ffdc7d);color:#06194d;border:0}
-.btn:active{transform:scale(.97)}
+.btn:active{transform:scale(0.97)}
 .feedback{min-height:32px;margin:14px 0 4px;text-align:center;font-weight:800}
 .feedback.good{color:var(--mint)}
 .feedback.bad{color:var(--pink)}
-.gamefoot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}
+.gamefoot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:16px}
 .hide{display:none !important}
+
+/* ===== MOBILE TỐI ƯU ===== */
 @media(max-width:600px){
   .choices{grid-template-columns:1fr}
   .modes{grid-template-columns:1fr}
   .answerrow{flex-direction:column}
-  .mode{min-height:auto;padding:20px 16px}
+  .mode{min-height:auto;padding:22px 18px}
   .btn{width:100%;text-align:center}
   .gamefoot{flex-direction:column}
   .gamefoot .btn{width:100%}
+  .choice{min-height:60px;padding:16px 14px;font-size:1.05rem}
+  .choice .letter{width:38px;height:38px;font-size:1.1rem}
 }
 </style>
 </head>
@@ -111,14 +155,14 @@ button,input{font:inherit}button{cursor:pointer;touch-action:manipulation;-webki
     </div>
 
     <div class="modes">
-      <button class="mode" type="button" onclick="startGame('quiz')">
+      <button class="mode" type="button" id="btnQuiz">
         <div class="emoji">🧩</div>
         <h2>Trắc Nghiệm</h2>
         <p>Chọn phương án đúng nhất để hoàn thành từ hoặc câu có nghĩa.</p>
         <span class="tag">20 câu (Phím 1-4 / Chạm)</span>
       </button>
 
-      <button class="mode" type="button" onclick="startGame('arrange')">
+      <button class="mode" type="button" id="btnArrange">
         <div class="emoji">✏️</div>
         <h2>Sắp Xếp Từ</h2>
         <p>Gõ lại đáp án hoàn chỉnh từ các ký tự bị đảo lộn vị trí.</p>
@@ -143,21 +187,21 @@ button,input{font:inherit}button{cursor:pointer;touch-action:manipulation;-webki
 
       <div class="answerrow hide" id="inputBox">
         <input type="text" id="userAnswer" placeholder="Nhập câu trả lời rồi nhấn Enter..." autocomplete="off" enterkeyhint="done" autocapitalize="characters">
-        <button class="btn primary" id="submitBtn" type="button" onclick="checkArrangeAnswer()">Gửi</button>
+        <button class="btn primary" id="submitBtn" type="button">Gửi</button>
       </div>
     </div>
 
     <div class="feedback" id="feedbackMessage"></div>
 
     <div class="gamefoot">
-      <button class="btn" type="button" onclick="backToHome()">🏠 Về trang chủ</button>
-      <button class="btn primary hide" id="nextBtn" type="button" onclick="nextQuestion()">Tiếp theo ➡️</button>
+      <button class="btn" type="button" id="btnHome">🏠 Về trang chủ</button>
+      <button class="btn primary hide" id="nextBtn" type="button">Tiếp theo ➡️</button>
     </div>
   </div>
 </div>
 
 <script>
-// ==================== 20 CÂU TRẮC NGHIỆM ====================
+// ==================== DỮ LIỆU ====================
 const QUIZ_DATA = [
   { q: "Từ nào viết đúng chính tả?", choices: ["Súc tích", "Xúc tích", "Súc tich", "Xúc tich"], correct: 0, hint: "Cô đọng, ngắn gọn nhưng đầy đủ." },
   { q: "Điền vào chỗ trống: 'Xôi hỏng bỏng ...'", choices: ["Chanh", "Không", "Không đuôi", "Bẻ"], correct: 1, hint: "Thành ngữ chỉ mất hết tất cả." },
@@ -181,7 +225,6 @@ const QUIZ_DATA = [
   { q: "Điền: 'Có công mài sắt ...'", choices: ["Có ngày nên kim", "Có ngày nên kim", "Có ngày nên kim", "Có ngày nên kim"], correct: 0, hint: "Kiên trì sẽ đạt kết quả." }
 ];
 
-// ==================== 20 CÂU SẮP XẾP TỪ ====================
 const ARRANGE_DATA = [
   { letters: "NGUYÊN", hint: "Trạng thái còn nguyên vẹn." },
   { letters: "NGƯỢNG", hint: "Cảm giác e thẹn, xấu hổ." },
@@ -205,7 +248,7 @@ const ARRANGE_DATA = [
   { letters: "THÀNH CÔNG", hint: "Đạt được kết quả tốt." }
 ];
 
-// ==================== BIẾN TRẠNG THÁI ====================
+// ==================== BIẾN ====================
 let currentMode = '';
 let questions = [];
 let currentIndex = 0;
@@ -218,14 +261,31 @@ const volumeSlider = document.getElementById('volumeSlider');
 
 bgMusic.volume = 0.4;
 
-audioToggle.addEventListener('click', async () => {
+// ==================== SỰ KIỆN NÚT (CÁCH AN TOÀN CHO MOBILE) ====================
+function bindTap(el, handler) {
+  if (!el) return;
+  el.addEventListener('click', function (e) {
+    e.preventDefault();
+    handler(e);
+  });
+}
+
+// Nút trang chủ
+bindTap(document.getElementById('btnQuiz'), () => startGame('quiz'));
+bindTap(document.getElementById('btnArrange'), () => startGame('arrange'));
+bindTap(document.getElementById('btnHome'), backToHome);
+bindTap(document.getElementById('nextBtn'), nextQuestion);
+bindTap(document.getElementById('submitBtn'), checkArrangeAnswer);
+
+// Âm thanh
+bindTap(audioToggle, async () => {
   const isOn = audioToggle.getAttribute('aria-pressed') === 'true';
   if (!isOn) {
     try {
       await bgMusic.play();
       audioToggle.setAttribute('aria-pressed', 'true');
-    } catch (e) {
-      alert('Trình duyệt chặn tự phát nhạc. Hãy chạm lại nút để bật.');
+    } catch (err) {
+      alert('Hãy chạm lại nút để bật nhạc (trình duyệt yêu cầu tương tác).');
     }
   } else {
     bgMusic.pause();
@@ -237,6 +297,7 @@ volumeSlider.addEventListener('input', () => {
   bgMusic.volume = volumeSlider.value / 100;
 });
 
+// ==================== HÀM XÁO TRỘN ====================
 function shuffleArray(arr) {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
@@ -247,6 +308,7 @@ function shuffleArray(arr) {
   return a;
 }
 
+// ==================== GAME LOGIC ====================
 function startGame(mode) {
   currentMode = mode;
   currentIndex = 0;
@@ -258,8 +320,11 @@ function startGame(mode) {
   } else {
     questions = ARRANGE_DATA.map(item => {
       const chars = item.letters.replace(/\s/g, '').split('');
-      const scrambled = shuffleArray(chars);
-      return { scrambled, correct: item.letters, hint: item.hint };
+      return {
+        scrambled: shuffleArray(chars),
+        correct: item.letters,
+        hint: item.hint
+      };
     });
   }
 
@@ -283,8 +348,7 @@ function showQuestion() {
 
   answered = false;
   const q = questions[currentIndex];
-  const progress = (currentIndex / questions.length) * 100;
-  document.getElementById('progressBar').style.width = progress + '%';
+  document.getElementById('progressBar').style.width = (currentIndex / questions.length * 100) + '%';
   document.getElementById('feedbackMessage').textContent = '';
   document.getElementById('feedbackMessage').className = 'feedback';
   document.getElementById('nextBtn').classList.add('hide');
@@ -303,17 +367,19 @@ function showQuestion() {
     choicesBox.classList.remove('hide');
     choicesBox.innerHTML = '';
 
-    // SỬA LỖI: hiển thị đúng nội dung đáp án
     q.choices.forEach((text, i) => {
       const btn = document.createElement('button');
-      btn.className = 'choice';
       btn.type = 'button';
+      btn.className = 'choice';
       btn.innerHTML = '<span class="letter">' + (i + 1) + '</span><span>' + text + '</span>';
-      btn.onclick = function () { selectChoice(i); };
-      btn.addEventListener('touchend', function (e) {
+      
+      // Cách gắn sự kiện an toàn cho mobile
+      btn.addEventListener('click', function (e) {
         e.preventDefault();
-        this.click();
-      }, { passive: false });
+        e.stopPropagation();
+        selectChoice(i);
+      });
+
       choicesBox.appendChild(btn);
     });
   } else {
@@ -333,7 +399,7 @@ function showQuestion() {
     });
 
     userAnswer.value = '';
-    setTimeout(() => userAnswer.focus(), 80);
+    setTimeout(() => userAnswer.focus(), 100);
   }
 }
 
@@ -345,9 +411,7 @@ function selectChoice(index) {
   const buttons = document.querySelectorAll('#choicesBox .choice');
   buttons.forEach(b => b.disabled = true);
 
-  const isCorrect = index === q.correct;
-
-  if (isCorrect) {
+  if (index === q.correct) {
     score += 10;
     buttons[index].classList.add('correct');
     document.getElementById('feedbackMessage').textContent = '🎉 Chính xác! +10 điểm';
@@ -372,27 +436,3 @@ function checkArrangeAnswer() {
   answered = true;
   const q = questions[currentIndex];
   const correctNorm = q.correct.toUpperCase().replace(/\s+/g, ' ');
-
-  if (val === correctNorm) {
-    score += 15;
-    document.getElementById('feedbackMessage').textContent = '🎉 Xuất sắc! +15 điểm';
-    document.getElementById('feedbackMessage').className = 'feedback good';
-  } else {
-    document.getElementById('feedbackMessage').textContent = '❌ Sai rồi! Đáp án đúng là: ' + q.correct;
-    document.getElementById('feedbackMessage').className = 'feedback bad';
-  }
-
-  document.getElementById('scoreTracker').textContent = 'Điểm: ' + score;
-  document.getElementById('nextBtn').classList.remove('hide');
-  userAnswer.blur();
-}
-
-function nextQuestion() {
-  currentIndex++;
-  showQuestion();
-}
-
-function endGame() {
-  document.getElementById('progressBar').style.width = '100%';
-  document.getElementById('questionPrompt').textContent = 'Hoàn thành!';
-  const maxScore = questions.length * (currentMode === '
