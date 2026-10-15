@@ -94,8 +94,12 @@ button{
 .choice.correct{border-color:var(--mint);background:#0a4744}
 .choice.wrong{border-color:var(--pink);background:#4c1737}
 .choice:disabled{pointer-events:none;opacity:.9}
-.answerrow{display:flex;gap:9px;max-width:680px;margin:0 auto}
-.answerrow input{min-width:0;flex:1;background:#06194d;border:1px solid #52629b;border-radius:13px;color:white;padding:14px;font-size:1.05rem;outline:none}
+.answerrow{display:flex;gap:10px;max-width:680px;margin:0 auto;align-items:stretch}
+.answerrow input{
+  min-width:0;flex:1;
+  background:#06194d;border:1px solid #52629b;border-radius:13px;
+  color:white;padding:16px 14px;font-size:1.1rem;outline:none;
+}
 .answerrow input:focus{border-color:var(--mint)}
 .btn{
   border:1px solid #52629b;background:#123a8a;color:var(--ink);
@@ -104,6 +108,17 @@ button{
 }
 .btn.primary{background:linear-gradient(120deg,#f8bd4d,#ffdc7d);color:#06194d;border:0}
 .btn:active{transform:scale(0.97)}
+
+/* Nút Gửi đặc biệt lớn và dễ chạm trên mobile */
+#submitBtn{
+  min-height:56px;
+  min-width:110px;
+  font-size:1.1rem;
+  font-weight:900;
+  padding:16px 22px;
+  flex-shrink:0;
+}
+
 .feedback{min-height:32px;margin:14px 0 4px;text-align:center;font-weight:800}
 .feedback.good{color:var(--mint)}
 .feedback.bad{color:var(--pink)}
@@ -113,12 +128,28 @@ button{
 @media(max-width:600px){
   .choices{grid-template-columns:1fr}
   .modes{grid-template-columns:1fr}
-  .answerrow{flex-direction:column}
+  .answerrow{
+    flex-direction:column;
+    gap:12px;
+  }
   .mode{min-height:auto;padding:22px 18px}
   .btn{width:100%;text-align:center}
   .gamefoot{flex-direction:column}
   .gamefoot .btn{width:100%}
   .choice{min-height:64px;padding:18px 16px;font-size:1.08rem}
+  
+  /* Nút Gửi trên mobile: full width + rất lớn để dễ chạm */
+  #submitBtn{
+    width:100%;
+    min-height:58px;
+    font-size:1.2rem;
+    padding:18px 20px;
+    border-radius:14px;
+  }
+  .answerrow input{
+    min-height:54px;
+    font-size:1.15rem;
+  }
 }
 </style>
 </head>
@@ -182,7 +213,7 @@ button{
       <div class="clue hide" id="clueBox"></div>
       <div class="choices" id="choicesBox"></div>
       <div class="answerrow hide" id="inputBox">
-        <input type="text" id="userAnswer" placeholder="Nhập câu trả lời rồi nhấn Enter..." autocomplete="off" enterkeyhint="done" autocapitalize="characters">
+        <input type="text" id="userAnswer" placeholder="Nhập câu trả lời rồi nhấn Gửi..." autocomplete="off" enterkeyhint="done" autocapitalize="characters" inputmode="text">
         <button class="btn primary" id="submitBtn" type="button">Gửi</button>
       </div>
     </div>
@@ -252,25 +283,37 @@ const audioToggle = document.getElementById('audioToggle');
 const volumeSlider = document.getElementById('volumeSlider');
 bgMusic.volume = 0.4;
 
-// Hàm xử lý chạm + click an toàn cho điện thoại
+// Hàm xử lý chạm + click cực ổn định trên điện thoại
 function onTap(el, handler) {
   if (!el) return;
-  let touched = false;
+  
+  let lastTrigger = 0;
+  
+  const trigger = function(e) {
+    const now = Date.now();
+    // Chống double fire trong 350ms
+    if (now - lastTrigger < 350) return;
+    lastTrigger = now;
+    handler(e);
+  };
 
+  // Ưu tiên touchend (cảm ứng thật)
   el.addEventListener('touchend', function(e) {
     e.preventDefault();
-    if (touched) return;
-    touched = true;
-    handler(e);
-    setTimeout(() => { touched = false; }, 300);
+    e.stopPropagation();
+    trigger(e);
   }, {passive: false});
 
+  // Fallback cho chuột / một số trình duyệt
   el.addEventListener('click', function(e) {
-    if (touched) return;
-    handler(e);
+    // Chỉ chạy nếu chưa bị touchend xử lý gần đây
+    if (Date.now() - lastTrigger > 350) {
+      trigger(e);
+    }
   });
 }
 
+// Gắn sự kiện
 onTap(document.getElementById('btnQuiz'), function() { startGame('quiz'); });
 onTap(document.getElementById('btnArrange'), function() { startGame('arrange'); });
 onTap(document.getElementById('btnHome'), backToHome);
@@ -296,18 +339,27 @@ volumeSlider.addEventListener('input', function() {
   bgMusic.volume = volumeSlider.value / 100;
 });
 
-// Hỗ trợ phím trên desktop + Enter trên mobile
+// Hỗ trợ phím + Enter
 document.addEventListener('keydown', function(e) {
-  if (document.getElementById('gameScreen').classList.contains('active')) {
-    if (currentMode === 'quiz' && !answered) {
-      if (e.key >= '1' && e.key <= '4') {
-        selectChoice(parseInt(e.key) - 1);
-      }
+  if (!document.getElementById('gameScreen').classList.contains('active')) return;
+  
+  if (currentMode === 'quiz' && !answered) {
+    if (e.key >= '1' && e.key <= '4') {
+      selectChoice(parseInt(e.key) - 1);
     }
-    if (currentMode === 'arrange' && e.key === 'Enter') {
-      e.preventDefault();
-      checkArrangeAnswer();
-    }
+  }
+  
+  if (currentMode === 'arrange' && (e.key === 'Enter' || e.keyCode === 13)) {
+    e.preventDefault();
+    checkArrangeAnswer();
+  }
+});
+
+// Cũng hỗ trợ khi nhấn nút Done trên bàn phím ảo của điện thoại
+document.getElementById('userAnswer').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' || e.keyCode === 13) {
+    e.preventDefault();
+    checkArrangeAnswer();
   }
 });
 
@@ -317,7 +369,6 @@ function shuffleArray(arr) {
     const j = Math.floor(Math.random() * (i + 1));
     const t = a[i]; a[i] = a[j]; a[j] = t;
   }
-  // Đảm bảo không trùng với gốc
   if (a.join('') === arr.join('') && a.length > 1) return shuffleArray(arr);
   return a;
 }
@@ -392,30 +443,4 @@ function showQuestion() {
     inputBox.classList.remove('hide');
     clueBox.classList.remove('hide');
     clueBox.innerHTML = '';
-    q.scrambled.forEach(function(letter) {
-      const tile = document.createElement('div');
-      tile.className = 'wordtile';
-      tile.textContent = letter;
-      clueBox.appendChild(tile);
-    });
-    userAnswer.value = '';
-    setTimeout(function() { userAnswer.focus(); }, 150);
-  }
-}
-
-function selectChoice(index) {
-  if (answered) return;
-  answered = true;
-  const q = questions[currentIndex];
-  const buttons = document.querySelectorAll('#choicesBox .choice');
-  for (let i = 0; i < buttons.length; i++) buttons[i].disabled = true;
-
-  if (index === q.correct) {
-    score += 10;
-    buttons[index].classList.add('correct');
-    document.getElementById('feedbackMessage').textContent = '🎉 Chính xác! +10 điểm';
-    document.getElementById('feedbackMessage').className = 'feedback good';
-  } else {
-    buttons[index].classList.add('wrong');
-    if (buttons[q.correct]) buttons[q.correct].classList.add('correct');
-    document.getElementById('feedbackMessage').textContent = '❌ Sai rồi! Đáp án đúng là: ' + 
+    
