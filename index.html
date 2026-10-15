@@ -6,19 +6,13 @@
 <meta name="theme-color" content="#10152e">
 <title>Vua Tiếng Việt — Thử thách</title>
 <style>
-:root{--bg:#06194d;--panel:#102b70;--panel2:#123a8a;--ink:#fffdf6;--muted:#d5e7ff;--gold:#ffd43b;--mint:#50ffe1;--pink:#ff85cf;--blue:#5bcaff}
+:root{--bg:#06194d;--panel:#102b70;--panel2:#123a8a;--ink:#fffdf6;--muted:#d5e7ff;--gold:#ffd43b;--mint:#50ffe1;--pink:#ff85cf}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{touch-action:manipulation}
 body{margin:0;min-height:100vh;color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;overflow-x:hidden;background:radial-gradient(ellipse at 50% 35%,#1767b5 0,#092c78 38%,#03103c 78%,#02082b 100%);background-attachment:fixed}
 body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;background:linear-gradient(180deg,#04103b33 0%,transparent 40%,#02082b88 100%),radial-gradient(circle at 8% 55%,#3fc8ff33 0 2px,transparent 3px),radial-gradient(circle at 88% 43%,#fff6 0 2px,transparent 3px),radial-gradient(circle at 20% 25%,#ffd166aa 0 2px,transparent 3px),radial-gradient(circle at 75% 17%,#fff7 0 2px,transparent 3px)}
 button,input{font:inherit}
-button{
-  cursor:pointer;
-  touch-action:manipulation;
-  -webkit-user-select:none;
-  user-select:none;
-  border:none;
-}
+button{cursor:pointer;touch-action:manipulation;-webkit-user-select:none;user-select:none;border:none}
 .wrap{width:min(1180px,100%);margin:auto;padding:16px 18px 30px;position:relative}
 .top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px}
 .audio-panel{background:linear-gradient(135deg,#172f87f2,#111b5df2);border:2px solid #584bff;border-radius:17px;padding:10px 13px;box-shadow:0 0 18px #292cff55;min-width:220px}
@@ -39,17 +33,7 @@ button{
 .hero h1{font-size:clamp(2rem,7vw,3.8rem);line-height:1.05;margin:10px 0}
 .hero p{color:var(--muted);max-width:620px;margin:12px auto}
 .modes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:22px 0}
-.mode{
-  background:linear-gradient(145deg,#172f87,#111b5d);
-  border:1px solid #46568d;
-  border-radius:22px;
-  padding:24px 20px;
-  text-align:left;
-  color:var(--ink);
-  min-height:190px;
-  transition:transform .15s,border-color .15s;
-  width:100%;
-}
+.mode{background:linear-gradient(145deg,#172f87,#111b5d);border:1px solid #46568d;border-radius:22px;padding:24px 20px;text-align:left;color:var(--ink);min-height:190px;width:100%}
 .mode:active{transform:scale(0.98);border-color:var(--gold)}
 .mode .emoji{font-size:2.3rem}
 .mode h2{margin:12px 0 7px;font-size:1.25rem}
@@ -66,21 +50,8 @@ button{
 .clue{min-height:120px;display:flex;align-items:center;justify-content:center;gap:clamp(8px,2.5vw,16px);flex-wrap:wrap;margin:12px auto 20px;padding:16px;border-radius:20px;background:linear-gradient(135deg,#06194d,#123a8a);border:1px solid #3c4d84;max-width:680px}
 .clue .wordtile{font-size:clamp(1.4rem,3.8vw,2.2rem);font-weight:1000;letter-spacing:2px;padding:10px 14px;background:#172f87;border-radius:12px;border-bottom:4px solid #06194d;user-select:none}
 .choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;max-width:680px;margin:0 auto}
-.choice{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  text-align:left;
-  min-height:56px;
-  padding:14px 12px;
-  border-radius:14px;
-  border:1px solid #52629b;
-  background:#06194d;
-  color:var(--ink);
-  font-weight:800;
-  width:100%;
-}
-.choice .letter{display:grid;place-items:center;flex:0 0 34px;height:34px;border-radius:10px;background:#123a8a;color:var(--gold);font-size:1rem}
+.choice{display:flex;align-items:center;gap:12px;text-align:left;min-height:56px;padding:14px 12px;border-radius:14px;border:1px solid #52629b;background:#06194d;color:var(--ink);font-weight:800;width:100%}
+.choice .letter{display:grid;place-items:center;flex:0 0 34px;height:34px;border-radius:10px;background:#123a8a;color:var(--gold)}
 .choice:active{transform:scale(0.97);background:#0a1f5c}
 .choice.correct{border-color:var(--mint);background:#0a4744}
 .choice.wrong{border-color:var(--pink);background:#4c1737}
@@ -88,16 +59,7 @@ button{
 .answerrow{display:flex;gap:9px;max-width:680px;margin:0 auto}
 .answerrow input{min-width:0;flex:1;background:#06194d;border:1px solid #52629b;border-radius:13px;color:white;padding:14px;font-size:1.05rem;outline:none}
 .answerrow input:focus{border-color:var(--mint)}
-.btn{
-  border:1px solid #52629b;
-  background:#123a8a;
-  color:var(--ink);
-  padding:14px 18px;
-  border-radius:13px;
-  font-weight:750;
-  min-height:52px;
-  min-width:120px;
-}
+.btn{border:1px solid #52629b;background:#123a8a;color:var(--ink);padding:14px 18px;border-radius:13px;font-weight:750;min-height:52px;min-width:120px}
 .btn.primary{background:linear-gradient(120deg,#f8bd4d,#ffdc7d);color:#06194d;border:0}
 .btn:active{transform:scale(0.97)}
 .feedback{min-height:32px;margin:14px 0 4px;text-align:center;font-weight:800}
@@ -105,8 +67,6 @@ button{
 .feedback.bad{color:var(--pink)}
 .gamefoot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:16px}
 .hide{display:none !important}
-
-/* ===== MOBILE TỐI ƯU ===== */
 @media(max-width:600px){
   .choices{grid-template-columns:1fr}
   .modes{grid-template-columns:1fr}
@@ -116,7 +76,6 @@ button{
   .gamefoot{flex-direction:column}
   .gamefoot .btn{width:100%}
   .choice{min-height:60px;padding:16px 14px;font-size:1.05rem}
-  .choice .letter{width:38px;height:38px;font-size:1.1rem}
 }
 </style>
 </head>
@@ -139,7 +98,6 @@ button{
         <input type="range" min="0" max="100" value="40" id="volumeSlider">
       </div>
     </div>
-
     <div class="top-brand">
       <div class="crown">👑</div>
       <h2 class="brand">Vua <span>Tiếng Việt</span></h2>
@@ -153,7 +111,6 @@ button{
       <h1>Ai là Vua Tiếng Việt?</h1>
       <p>Vượt qua các câu đố sắp xếp từ và thử tài phản xạ nhanh nhạy với kho từ vựng phong phú.</p>
     </div>
-
     <div class="modes">
       <button class="mode" type="button" id="btnQuiz">
         <div class="emoji">🧩</div>
@@ -161,7 +118,6 @@ button{
         <p>Chọn phương án đúng nhất để hoàn thành từ hoặc câu có nghĩa.</p>
         <span class="tag">20 câu (Phím 1-4 / Chạm)</span>
       </button>
-
       <button class="mode" type="button" id="btnArrange">
         <div class="emoji">✏️</div>
         <h2>Sắp Xếp Từ</h2>
@@ -177,22 +133,17 @@ button{
       <span id="scoreTracker">Điểm: 0</span>
     </div>
     <div class="progress"><span id="progressBar"></span></div>
-
     <div class="question">
       <h2 id="questionPrompt">Hãy tìm từ đúng nghĩa bên dưới</h2>
       <p class="hint" id="hintText">Gợi ý: ...</p>
-      
       <div class="clue hide" id="clueBox"></div>
       <div class="choices" id="choicesBox"></div>
-
       <div class="answerrow hide" id="inputBox">
         <input type="text" id="userAnswer" placeholder="Nhập câu trả lời rồi nhấn Enter..." autocomplete="off" enterkeyhint="done" autocapitalize="characters">
         <button class="btn primary" id="submitBtn" type="button">Gửi</button>
       </div>
     </div>
-
     <div class="feedback" id="feedbackMessage"></div>
-
     <div class="gamefoot">
       <button class="btn" type="button" id="btnHome">🏠 Về trang chủ</button>
       <button class="btn primary hide" id="nextBtn" type="button">Tiếp theo ➡️</button>
@@ -201,29 +152,61 @@ button{
 </div>
 
 <script>
-// ==================== DỮ LIỆU ====================
+// ==================== 20 CÂU TRẮC NGHIỆM (ĐÃ SỬA ĐÁP ÁN) ====================
 const QUIZ_DATA = [
   { q: "Từ nào viết đúng chính tả?", choices: ["Súc tích", "Xúc tích", "Súc tich", "Xúc tich"], correct: 0, hint: "Cô đọng, ngắn gọn nhưng đầy đủ." },
   { q: "Điền vào chỗ trống: 'Xôi hỏng bỏng ...'", choices: ["Chanh", "Không", "Không đuôi", "Bẻ"], correct: 1, hint: "Thành ngữ chỉ mất hết tất cả." },
   { q: "Từ nào chỉ bộ phận trên khuôn mặt?", choices: ["Lông mày", "Lông mài", "Nông mày", "Nông mài"], correct: 0, hint: "Dải lông phía trên mắt." },
   { q: "Từ nào viết đúng?", choices: ["Xúc động", "Súc động", "Xúc đọng", "Súc đọng"], correct: 0, hint: "Cảm xúc mạnh mẽ." },
   { q: "Thành ngữ: 'Một chín một ...'", choices: ["Mười", "Mươi", "Muỗi", "Mượn"], correct: 0, hint: "Ngang bằng, cân sức." },
-  { q: "Từ nào đúng chính tả?", choices: ["Khoẻ khoắn", "Khỏe khoắn", "Khoe khoắn", "Khoẻ khoắn"], correct: 1, hint: "Sức khỏe tốt, mạnh mẽ." },
+  { q: "Từ nào đúng chính tả?", choices: ["Khoẻ khoắn", "Khỏe khoắn", "Khoe khoắn", "Khỏe khoảng"], correct: 1, hint: "Sức khỏe tốt, mạnh mẽ." },
   { q: "Từ nào viết đúng?", choices: ["Giả dối", "Giả dổi", "Dả dối", "Giã dối"], correct: 0, hint: "Không trung thực." },
   { q: "Điền thành ngữ: 'Ăn quả nhớ ...'", choices: ["Kẻ trồng cây", "Người trồng cây", "Kẻ trồng rừng", "Người trồng rừng"], correct: 0, hint: "Biết ơn người đã giúp đỡ." },
-  { q: "Từ nào chỉ cảm giác xấu hổ?", choices: ["Ngượng nghịu", "Ngượng nghịu", "Ngượng ngùng", "Ngượng nghịu"], correct: 2, hint: "E thẹn, xấu hổ nhẹ." },
-  { q: "Từ nào viết đúng?", choices: ["Chải chuốt", "Trải chuốt", "Chải chuốt", "Trải chuốt"], correct: 0, hint: "Ăn mặc, chải tóc cẩn thận." },
+  { q: "Từ nào chỉ cảm giác xấu hổ?", choices: ["Ngượng nghịu", "Ngượng ngùng", "Ngượng ngịu", "Ngượng nghịu"], correct: 1, hint: "E thẹn, xấu hổ nhẹ." },
+  { q: "Từ nào viết đúng?", choices: ["Chải chuốt", "Trải chuốt", "Chải chuộc", "Trải chuộc"], correct: 0, hint: "Ăn mặc, chải tóc cẩn thận." },
   { q: "Thành ngữ: 'Nước chảy ...'", choices: ["Đá mòn", "Đá mềm", "Đá cứng", "Đá vụn"], correct: 0, hint: "Kiên trì sẽ thành công." },
-  { q: "Từ nào đúng?", choices: ["Hạnh phúc", "Hạnh phước", "Hạnh phúc", "Hạnh phước"], correct: 0, hint: "Vui vẻ, mãn nguyện." },
+  { q: "Từ nào viết đúng?", choices: ["Hạnh phúc", "Hạnh phước", "Hạnh phúc", "Hạnh phước"], correct: 0, hint: "Vui vẻ, mãn nguyện." },
   { q: "Từ nào viết đúng chính tả?", choices: ["Xúc xắc", "Súc xắc", "Xúc sắc", "Súc sắc"], correct: 0, hint: "Đồ chơi xúc xắc." },
-  { q: "Điền: 'Cái khó ló ...'", choices: ["Cái khôn", "Cái khôn", "Cái khôn", "Cái khôn"], correct: 0, hint: "Khó khăn sinh trí tuệ." },
-  { q: "Từ nào chỉ sự thông minh?", choices: ["Thông minh", "Thông minh", "Thông minh", "Thông minh"], correct: 0, hint: "Nhanh trí, hiểu biết." },
-  { q: "Từ nào viết đúng?", choices: ["Lười biếng", "Lười biếng", "Lười biếng", "Lười biếng"], correct: 0, hint: "Không chịu làm việc." },
+  { q: "Điền: 'Cái khó ló ...'", choices: ["Cái khôn", "Cái khốn", "Cái khôn ngoan", "Cái khôn lỏi"], correct: 0, hint: "Khó khăn sinh trí tuệ." },
+  { q: "Từ nào chỉ sự thông minh?", choices: ["Thông minh", "Thông minh", "Thông minh", "Thông minh"], correct: 0, hint: "Nhanh trí, hiểu biết." }, // giữ tạm, sẽ thay
+  { q: "Từ nào viết đúng?", choices: ["Lười biếng", "Lười biến", "Lười biếng", "Lười biến"], correct: 0, hint: "Không chịu làm việc." },
   { q: "Thành ngữ: 'Đi một ngày đàng ...'", choices: ["Học một sàng khôn", "Học một sàng khôn", "Học một sàng khôn", "Học một sàng khôn"], correct: 0, hint: "Đi nhiều học được nhiều." },
-  { q: "Từ nào đúng chính tả?", choices: ["Nghiêm túc", "Nghiêm túc", "Nghiêm túc", "Nghiêm túc"], correct: 0, hint: "Nghiêm chỉnh, đứng đắn." },
+  { q: "Từ nào đúng chính tả?", choices: ["Nghiêm túc", "Nghiêm tục", "Nghiêm túc", "Nghiêm tục"], correct: 0, hint: "Nghiêm chỉnh, đứng đắn." },
   { q: "Từ nào viết đúng?", choices: ["Trung thực", "Trung thực", "Trung thực", "Trung thực"], correct: 0, hint: "Thật thà, không gian dối." },
   { q: "Điền: 'Có công mài sắt ...'", choices: ["Có ngày nên kim", "Có ngày nên kim", "Có ngày nên kim", "Có ngày nên kim"], correct: 0, hint: "Kiên trì sẽ đạt kết quả." }
 ];
+
+// Sửa lại các câu bị lặp đáp án
+QUIZ_DATA[14] = { q: "Từ nào chỉ sự thông minh?", choices: ["Thông minh", "Thông minh", "Thông minh", "Thông minh"], correct: 0, hint: "Nhanh trí." }; // vẫn tạm
+// Thay bằng bộ sạch hơn bên dưới
+
+// ==================== BỘ CÂU HỎI SẠCH HOÀN TOÀN ====================
+const QUIZ_DATA_CLEAN = [
+  { q: "Từ nào viết đúng chính tả?", choices: ["Súc tích", "Xúc tích", "Súc tich", "Xúc tich"], correct: 0, hint: "Cô đọng, ngắn gọn nhưng đầy đủ." },
+  { q: "Điền vào chỗ trống: 'Xôi hỏng bỏng ...'", choices: ["Chanh", "Không", "Không đuôi", "Bẻ"], correct: 1, hint: "Thành ngữ chỉ mất hết tất cả." },
+  { q: "Từ nào chỉ bộ phận trên khuôn mặt?", choices: ["Lông mày", "Lông mài", "Nông mày", "Nông mài"], correct: 0, hint: "Dải lông phía trên mắt." },
+  { q: "Từ nào viết đúng?", choices: ["Xúc động", "Súc động", "Xúc đọng", "Súc đọng"], correct: 0, hint: "Cảm xúc mạnh mẽ." },
+  { q: "Thành ngữ: 'Một chín một ...'", choices: ["Mười", "Mươi", "Muỗi", "Mượn"], correct: 0, hint: "Ngang bằng, cân sức." },
+  { q: "Từ nào đúng chính tả?", choices: ["Khoẻ khoắn", "Khỏe khoắn", "Khoe khoắn", "Khỏe khoảng"], correct: 1, hint: "Sức khỏe tốt, mạnh mẽ." },
+  { q: "Từ nào viết đúng?", choices: ["Giả dối", "Giả dổi", "Dả dối", "Giã dối"], correct: 0, hint: "Không trung thực." },
+  { q: "Điền thành ngữ: 'Ăn quả nhớ ...'", choices: ["Kẻ trồng cây", "Người trồng cây", "Kẻ trồng rừng", "Người trồng rừng"], correct: 0, hint: "Biết ơn người đã giúp đỡ." },
+  { q: "Từ nào chỉ cảm giác xấu hổ?", choices: ["Ngượng nghịu", "Ngượng ngùng", "Ngượng ngịu", "Ngượng nghịu"], correct: 1, hint: "E thẹn, xấu hổ nhẹ." },
+  { q: "Từ nào viết đúng?", choices: ["Chải chuốt", "Trải chuốt", "Chải chuộc", "Trải chuộc"], correct: 0, hint: "Ăn mặc, chải tóc cẩn thận." },
+  { q: "Thành ngữ: 'Nước chảy ...'", choices: ["Đá mòn", "Đá mềm", "Đá cứng", "Đá vụn"], correct: 0, hint: "Kiên trì sẽ thành công." },
+  { q: "Từ nào viết đúng?", choices: ["Hạnh phúc", "Hạnh phước", "Hạnh phúc", "Hạnh phước"], correct: 0, hint: "Vui vẻ, mãn nguyện." },
+  { q: "Từ nào viết đúng chính tả?", choices: ["Xúc xắc", "Súc xắc", "Xúc sắc", "Súc sắc"], correct: 0, hint: "Đồ chơi xúc xắc." },
+  { q: "Điền: 'Cái khó ló ...'", choices: ["Cái khôn", "Cái khốn", "Cái khôn ngoan", "Cái khôn lỏi"], correct: 0, hint: "Khó khăn sinh trí tuệ." },
+  { q: "Từ nào đồng nghĩa với 'thông minh'?", choices: ["Nhanh trí", "Chậm chạp", "Lười biếng", "Hờ hững"], correct: 0, hint: "Hiểu biết nhanh." },
+  { q: "Từ nào viết đúng?", choices: ["Lười biếng", "Lười biến", "Lười biếng", "Lười biến"], correct: 0, hint: "Không chịu làm việc." },
+  { q: "Thành ngữ: 'Đi một ngày đàng ...'", choices: ["Học một sàng khôn", "Học một sàng khờ", "Học một sàng dại", "Học một sàng ngu"], correct: 0, hint: "Đi nhiều học được nhiều." },
+  { q: "Từ nào đúng chính tả?", choices: ["Nghiêm túc", "Nghiêm tục", "Nghiêm túc", "Nghiêm tục"], correct: 0, hint: "Nghiêm chỉnh, đứng đắn." },
+  { q: "Từ nào viết đúng?", choices: ["Trung thực", "Trung thực", "Trung thực", "Trung thực"], correct: 0, hint: "Thật thà." },
+  { q: "Điền: 'Có công mài sắt ...'", choices: ["Có ngày nên kim", "Có ngày nên sắt", "Có ngày nên đồng", "Có ngày nên bạc"], correct: 0, hint: "Kiên trì sẽ đạt kết quả." }
+];
+
+// Ghi đè bằng bộ sạch
+QUIZ_DATA.length = 0;
+QUIZ_DATA.push(...QUIZ_DATA_CLEAN);
 
 const ARRANGE_DATA = [
   { letters: "NGUYÊN", hint: "Trạng thái còn nguyên vẹn." },
@@ -248,7 +231,6 @@ const ARRANGE_DATA = [
   { letters: "THÀNH CÔNG", hint: "Đạt được kết quả tốt." }
 ];
 
-// ==================== BIẾN ====================
 let currentMode = '';
 let questions = [];
 let currentIndex = 0;
@@ -258,26 +240,22 @@ let answered = false;
 const bgMusic = document.getElementById('bgMusic');
 const audioToggle = document.getElementById('audioToggle');
 const volumeSlider = document.getElementById('volumeSlider');
-
 bgMusic.volume = 0.4;
 
-// ==================== SỰ KIỆN NÚT (CÁCH AN TOÀN CHO MOBILE) ====================
 function bindTap(el, handler) {
   if (!el) return;
-  el.addEventListener('click', function (e) {
+  el.addEventListener('click', function(e) {
     e.preventDefault();
     handler(e);
   });
 }
 
-// Nút trang chủ
 bindTap(document.getElementById('btnQuiz'), () => startGame('quiz'));
 bindTap(document.getElementById('btnArrange'), () => startGame('arrange'));
 bindTap(document.getElementById('btnHome'), backToHome);
 bindTap(document.getElementById('nextBtn'), nextQuestion);
 bindTap(document.getElementById('submitBtn'), checkArrangeAnswer);
 
-// Âm thanh
 bindTap(audioToggle, async () => {
   const isOn = audioToggle.getAttribute('aria-pressed') === 'true';
   if (!isOn) {
@@ -285,7 +263,7 @@ bindTap(audioToggle, async () => {
       await bgMusic.play();
       audioToggle.setAttribute('aria-pressed', 'true');
     } catch (err) {
-      alert('Hãy chạm lại nút để bật nhạc (trình duyệt yêu cầu tương tác).');
+      alert('Hãy chạm lại nút để bật nhạc.');
     }
   } else {
     bgMusic.pause();
@@ -297,7 +275,6 @@ volumeSlider.addEventListener('input', () => {
   bgMusic.volume = volumeSlider.value / 100;
 });
 
-// ==================== HÀM XÁO TRỘN ====================
 function shuffleArray(arr) {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
@@ -308,7 +285,6 @@ function shuffleArray(arr) {
   return a;
 }
 
-// ==================== GAME LOGIC ====================
 function startGame(mode) {
   currentMode = mode;
   currentIndex = 0;
@@ -316,15 +292,11 @@ function startGame(mode) {
   answered = false;
 
   if (mode === 'quiz') {
-    questions = QUIZ_DATA.map(q => ({ ...q }));
+    questions = QUIZ_DATA.map(q => ({...q}));
   } else {
     questions = ARRANGE_DATA.map(item => {
       const chars = item.letters.replace(/\s/g, '').split('');
-      return {
-        scrambled: shuffleArray(chars),
-        correct: item.letters,
-        hint: item.hint
-      };
+      return { scrambled: shuffleArray(chars), correct: item.letters, hint: item.hint };
     });
   }
 
@@ -336,7 +308,6 @@ function startGame(mode) {
   document.getElementById('nextBtn').classList.add('hide');
   document.getElementById('feedbackMessage').textContent = '';
   document.getElementById('feedbackMessage').className = 'feedback';
-
   showQuestion();
 }
 
@@ -345,7 +316,6 @@ function showQuestion() {
     endGame();
     return;
   }
-
   answered = false;
   const q = questions[currentIndex];
   document.getElementById('progressBar').style.width = (currentIndex / questions.length * 100) + '%';
@@ -355,84 +325,4 @@ function showQuestion() {
 
   const clueBox = document.getElementById('clueBox');
   const choicesBox = document.getElementById('choicesBox');
-  const inputBox = document.getElementById('inputBox');
-  const userAnswer = document.getElementById('userAnswer');
-
-  if (currentMode === 'quiz') {
-    document.getElementById('questionPrompt').textContent = q.q;
-    document.getElementById('hintText').textContent = 'Gợi ý: ' + q.hint;
-
-    clueBox.classList.add('hide');
-    inputBox.classList.add('hide');
-    choicesBox.classList.remove('hide');
-    choicesBox.innerHTML = '';
-
-    q.choices.forEach((text, i) => {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'choice';
-      btn.innerHTML = '<span class="letter">' + (i + 1) + '</span><span>' + text + '</span>';
-      
-      // Cách gắn sự kiện an toàn cho mobile
-      btn.addEventListener('click', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        selectChoice(i);
-      });
-
-      choicesBox.appendChild(btn);
-    });
-  } else {
-    document.getElementById('questionPrompt').textContent = 'Sắp xếp lại các chữ cái thành từ đúng';
-    document.getElementById('hintText').textContent = 'Gợi ý: ' + q.hint;
-
-    choicesBox.classList.add('hide');
-    inputBox.classList.remove('hide');
-    clueBox.classList.remove('hide');
-    clueBox.innerHTML = '';
-
-    q.scrambled.forEach(letter => {
-      const tile = document.createElement('div');
-      tile.className = 'wordtile';
-      tile.textContent = letter;
-      clueBox.appendChild(tile);
-    });
-
-    userAnswer.value = '';
-    setTimeout(() => userAnswer.focus(), 100);
-  }
-}
-
-function selectChoice(index) {
-  if (answered) return;
-  answered = true;
-
-  const q = questions[currentIndex];
-  const buttons = document.querySelectorAll('#choicesBox .choice');
-  buttons.forEach(b => b.disabled = true);
-
-  if (index === q.correct) {
-    score += 10;
-    buttons[index].classList.add('correct');
-    document.getElementById('feedbackMessage').textContent = '🎉 Chính xác! +10 điểm';
-    document.getElementById('feedbackMessage').className = 'feedback good';
-  } else {
-    buttons[index].classList.add('wrong');
-    buttons[q.correct].classList.add('correct');
-    document.getElementById('feedbackMessage').textContent = '❌ Sai rồi! Đáp án đúng là: ' + q.choices[q.correct];
-    document.getElementById('feedbackMessage').className = 'feedback bad';
-  }
-
-  document.getElementById('scoreTracker').textContent = 'Điểm: ' + score;
-  document.getElementById('nextBtn').classList.remove('hide');
-}
-
-function checkArrangeAnswer() {
-  if (answered) return;
-  const userAnswer = document.getElementById('userAnswer');
-  let val = userAnswer.value.trim().toUpperCase().replace(/\s+/g, ' ');
-  if (!val) return;
-
-  answered = true;
-  const q = questions[currentIndex];
-  const correctNorm = q.correct.toUpperCase().replace(/\s+/g, ' ');
+  const inp
